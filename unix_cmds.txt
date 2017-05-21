@@ -34,6 +34,15 @@
     # Untar a directory
     tar -xzvf dir.tar.gz
 
+#### Compiling ####
+    #### C ####
+    # Compile .c file basic
+    gcc -o myprog_binary myprog.c
+
+    #### Makefiles ####
+    # Typical flow
+    ./configure
+    make && sudo make install
 
 #### Networking ####
 
@@ -56,6 +65,8 @@
         # NOTE: You'll need to add your public key
                 to github.com but you should have
                 done that already!
+        # NOTE: You'll also create the repo on
+                github before doing this..
         # Start git
         git init
         # Create README file
