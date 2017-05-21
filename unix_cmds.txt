@@ -1,0 +1,81 @@
+#### General ####
+
+    #### cli tips ####
+        # !:1 will replay the second element of the last command  
+        # sudo !! will replay the last command
+        # ctrl-c kills current proc
+        # ctrl-u paired with ctrl-y will cut/paste your current cmd on cli
+        # ctrl-a for start of line
+
+    #### vi tips ####
+        # Save file when denied because of lack of sudo privileges
+        :w !sudo tee %
+
+        # Substitute word1 for word2 on current line
+        :s/word1/word2
+        # Substitute all word1's for word2's in current file
+        :%s/word1/word2/gc
+        
+        # Add 4 leading spaces to each line
+        :%s/^/    /gc
+        # Remove 4 leading spaces to each line
+        :%s/^    //gc
+       
+
+        
+    # Look for something in a file in current directory (recursive so be careful)
+    find . | xargs grep $my_search_item
+
+    # Get clear picture of directory structure below cwd
+    tree .
+
+    # Tar up directory
+    tar -czvf dir.tar.gz dir/
+    # Untar a directory
+    tar -xzvf dir.tar.gz
+
+
+#### Networking ####
+
+    # Scan ports of local subnet
+    nmap -sP ip_addr_of_target/24
+    # Get more detail on a particular IP
+    nmap -O ip_addr_of_target
+
+    # Find open ports
+    netstat -anup
+
+
+#### OS ####
+    # Details of OS 
+    uname -a
+    # lsof -a
+
+#### git ####
+    #### Starting up ####
+        # NOTE: You'll need to add your public key
+                to github.com but you should have
+                done that already!
+        # Start git
+        git init
+        # Create README file
+        touch README.txt
+        # Commit readme to git
+        git add README.txt
+        git commit -m "Added README"
+        git remote add origin git@github.com:username/repo-name.git
+        git push -u origin master
+
+    # Changing remote
+    git remote set-url origin git@github.com:username/repo-name.git
+
+    # Check status, use this first whenever things are funky
+    git status
+
+    # Commit file
+    git commit -m "I'm committing file.txt" file.txt
+    
+    # Push file
+    git push -u origin master
+
+
