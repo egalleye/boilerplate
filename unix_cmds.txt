@@ -21,22 +21,54 @@
         :%s/^/    /gc
         # Remove 4 leading spaces to each line
         :%s/^    //gc
-       
 
+    #### UNIX ####
         
-    # Look for something in a file in current directory (recursive so be careful)
-    find . | xargs grep $my_search_item
+        # Change to directory 
+        pushd 
+        # Go back to previous directory (if using pushd)
+        popd
 
-    # Get clear picture of directory structure below cwd
-    tree .
+        # List all files in directory (even hidden)
+        ls -la
 
-    # Tar up directory
-    tar -czvf dir.tar.gz dir/
-    # Untar a directory
-    tar -xzvf dir.tar.gz
+        # Get clear picture of directory structure below cwd
+        tree .
 
-    # Find size of dir
-    du -sh /path/to/dir/
+    	# Look for something in a file in current directory (recursive so be careful)
+    	find . | xargs grep $my_search_item
+    
+        # Tar up directory
+        tar -czvf dir.tar.gz dir/
+        # Untar a directory
+        tar -xzvf dir.tar.gz
+    
+        # Find size of dir
+        du -sh /path/to/dir/
+ 
+        ## Find files held open by process ##
+          # find proc id (pid)
+          ps -C {proc_name}
+          # List files 
+          lsof -p {pid}
+
+
+        ## Examine Running Processes ##
+          # View All procs
+          top
+          # or go real gangster with:
+          sudo perf top
+
+          # Look for a proc
+          ps aux | grep {proc}
+          # or
+          pux -C {proc}
+
+       ## SED ##
+          # TODO
+
+       ## AWK ##
+          # TODO
 
 #### ssh ####
     # Copy public keys to different computer (Not available on all systems)
@@ -50,13 +82,13 @@
 
 #### Compiling ####
     #### C ####
-    # Compile .c file basic
-    gcc -o myprog_binary myprog.c
+      # Compile .c file basic
+      gcc -o myprog_binary myprog.c
 
     #### Makefiles ####
-    # Typical flow
-    ./configure
-    make && sudo make install
+      # Typical flow
+      ./configure
+      make && sudo make install
 
 #### Networking ####
 
