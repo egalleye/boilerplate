@@ -10,69 +10,69 @@
 
     #### vi tips ####
         # Save file when denied because of lack of sudo privileges
-        :w !sudo tee %
+          :w !sudo tee %
 
         # Substitute word1 for word2 on current line
-        :s/word1/word2
+          :s/word1/word2
         # Substitute all word1's for word2's in current file
-        :%s/word1/word2/gc
+          :%s/word1/word2/gc
         
         # Add 4 leading spaces to each line
-        :%s/^/    /gc
+          :%s/^/    /gc
         # Remove 4 leading spaces to each line
-        :%s/^    //gc
+          :%s/^    //gc
 
     #### UNIX ####
         
         # Change to directory 
-        pushd 
+          pushd 
         # Go back to previous directory (if using pushd)
-        popd
+          popd
 
         # List all files in directory (even hidden)
-        ls -la
+          ls -la
 
         # Get clear picture of directory structure below cwd
-        tree .
+          tree .
 
     	# Look for something in a file in current directory (recursive so be careful)
-    	find . | xargs grep $my_search_item
+          find . | xargs grep $my_search_item
     
         # Tar up directory
-        tar -czvf dir.tar.gz dir/
+          tar -czvf dir.tar.gz dir/
         # Untar a directory
-        tar -xzvf dir.tar.gz
+          tar -xzvf dir.tar.gz
     
         # Find size of dir
-        du -sh /path/to/dir/
+          du -sh /path/to/dir/
 
         # Make script executable
-        chmod +x
+          chmod +x
 
         # Change ownership of file
-        sudo chown {username}:{usergroup} {filename.txt}
+          sudo chown {username}:{usergroup} {filename.txt}
 
         # Change ownership of entire directory
-        sudo chown -R {username}:{usergroup} {filename.txt}
+          sudo chown -R {username}:{usergroup} {filename.txt}
 
         #### Systemd ####
           # Path to .service files
-          /etc/systemd/system/multi-user.target.wants/blah.service
+            /etc/systemd/system/multi-user.target.wants/blah.service
 
           # Start daemon
-          sudo systemd start {deamon}
+            sudo systemd start {deamon}
 
           # Stop daemon
-          sudo systemd stop {deamon}
+            sudo systemd stop {deamon}
 
           # get status of daemon
-          sudo systemd status {deamon}
+            sudo systemd status {deamon}
 
           # Enable daemon on boot
-          sudo systemd enable {deamon}
+            sudo systemd enable {deamon}
  
           # Start daemon on boot
-          sudo systemd disable {deamon}
+            sudo systemd disable {deamon}
 
        #### Examine Running Processes ####
            # View All procs
@@ -111,10 +111,10 @@
 
 #### ssh ####
     # Copy public keys to different computer (Not available on all systems)
-    ssh-copy-id username@
+      ssh-copy-id username@
 
     # Gangster way of copying public keys to different computer
-    cat ~/.ssh/id_rsa.pub | ssh username@the.target.ip.addr 'cat >> ~/.ssh/authorized_keys'
+      cat ~/.ssh/id_rsa.pub | ssh username@the.target.ip.addr 'cat >> ~/.ssh/authorized_keys'
 
     #### ssh config ####
     #TODO
@@ -122,35 +122,35 @@
 #### Compiling ####
     #### C ####
       # Compile .c file basic
-      gcc -o myprog_binary myprog.c
+        gcc -o myprog_binary myprog.c
 
     #### Makefiles ####
       # Typical flow
-      ./configure
-      make && sudo make install
+        ./configure
+        make && sudo make install
 
 #### Networking ####
 
     # Scan ports of local subnet
-    nmap -sP ip_addr_of_target/24
+      nmap -sP ip_addr_of_target/24
     # Get more detail on a particular IP
-    nmap -O ip_addr_of_target
+      nmap -O ip_addr_of_target
 
     ## Find open ports
       # list port 
-      netstat -anup
+        netstat -anup
       # list port 
-      netstat -tlupn
+        netstat -tlupn
       # List protocol name
-      netstat -lptu
+        netstat -lptu
 
       # List all open files 
-      sudo lsof -i
+        sudo lsof -i
 
 
 #### OS ####
     # Details of OS 
-    uname -a
+      uname -a
 
 #### git ####
     #### Starting up ####
@@ -160,25 +160,25 @@
         # NOTE: You'll also create the repo on
                 github before doing this..
         # Start git
-        git init
+          git init
         # Create README file
-        touch README.txt
+          touch README.txt
         # Commit readme to git
-        git add README.txt
-        git commit -m "Added README"
-        git remote add origin git@github.com:username/repo-name.git
-        git push -u origin master
+          git add README.txt
+          git commit -m "Added README"
+          git remote add origin git@github.com:username/repo-name.git
+          git push -u origin master
 
     # Changing remote
-    git remote set-url origin git@github.com:username/repo-name.git
+      git remote set-url origin git@github.com:username/repo-name.git
 
     # Check status, use this first whenever things are funky
-    git status
+      git status
 
     # Commit file
-    git commit -m "I'm committing file.txt" file.txt
+      git commit -m "I'm committing file.txt" file.txt
     
     # Push file
-    git push -u origin master
+      git push -u origin master
 
 
