@@ -54,7 +54,26 @@
 
         # Change ownership of entire directory
         sudo chown -R {username}:{usergroup} {filename.txt}
+
+        #### Systemd ####
+          # Path to .service files
+          /etc/systemd/system/multi-user.target.wants/blah.service
+
+          # Start daemon
+          sudo systemd start {deamon}
+
+          # Stop daemon
+          sudo systemd stop {deamon}
+
+          # get status of daemon
+          sudo systemd status {deamon}
+
+          # Enable daemon on boot
+          sudo systemd enable {deamon}
  
+          # Start daemon on boot
+          sudo systemd disable {deamon}
+
         ## Find files held open by process ##
           # find proc id (pid)
           ps -C {proc_name}
@@ -62,16 +81,23 @@
           lsof -p {pid}
 
 
-        ## Examine Running Processes ##
-          # View All procs
-          top
-          # or go real gangster with:
-          sudo perf top
+       ## Examine Running Processes ##
+         # View All procs
+         top
+         # or go real gangster with:
+         sudo perf top
 
-          # Look for a proc
-          ps aux | grep {proc}
-          # or
-          pux -C {proc}
+         # Look for a proc
+         ps aux | grep {proc}
+         # or
+         ps -C {proc}
+       ## Kill process ##
+         # If it's running in console
+           [ctrl-c]
+         # Kill specific process
+           kill -9 {pid}
+         # Kill all instances of process
+           pkill {process_name}
 
        ## SED ##
           # TODO
