@@ -104,4 +104,5 @@
         npm install d3
         npm install requirejs
         
+        # Rest of setup at: https://d3js.org/#introduction
 
