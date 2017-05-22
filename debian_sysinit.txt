@@ -1,5 +1,7 @@
 # This is a guide to setting up a Debian system so that it's up to speed for dev
 
+# NOTE: If any of these commands prompt you accept defaults unless I specify otherwise
+
 # Update system 
 sudo apt-get update && sudo apt-get upgrade -y;
 # Install vim cuz it's key to all
@@ -12,9 +14,8 @@ sudo vi /etc/sudoers
     egall ALL=(ALL) NOPASSWD: ALL
     """
 # Grab the handy tools they didn't install
-sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc linux-tools-4.8.0-34-generic
+sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc linux-tools-4.8.0-34-generic build-essential
 # For webserver 
-sudo apt-get install -y nginx postgresql postgresql-contrib
 
 #### Automatic Security updates ####
     
@@ -42,6 +43,58 @@ sudo apt-get install -y nginx postgresql postgresql-contrib
     cd ~/.ssh/
     # Generate public/private keypair 
     ssh-keygen -t rsa
+    
     # Copy id over for passwordless ssh other places
     ssh-copy-id username@otherservers.ip
+
+#### Webserver setup ####
+    ## Install nginx ##
+        sudo apt-get install -y nginx 
+  
+      ## Setup firewall ##
+          sudo ufw enable
+          sudo systemctl enable ufw
+        # Start ufw
+          sudo systemctl start ufw
+        # Configure Firewall
+          sudo ufw allow ssh
+          sudo ufw allow 'Nginx HTTP'
+  
+      # Enable nginx
+        sudo systemctl enable nginx
+      # Start nginx
+        sudo systemctl start nginx
+    
+
+    ## Install postgres ##
+        sudo apt-get install -y postgresql postgresql-contrib
+      # Create new user account (with same name as database)
+        adduser tester
+      # Change to postgres user
+        sudo -i -u postgres
+       
+      # Create a postgres superuser useraccount (same name as your database)
+        createuser --interactive # yes to superuser
+  
+      # Create database
+        createdb {testdb}
+      # Open postgres cmd prompt
+        psql
+      # Fromp psql prompt you can check connection
+        \conninfo
+      # View tables
+        \dt 
+      # Quit
+        \q
+
+    ## Install Node.js ##
+      curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      ## Running hello.js
+        # Make hello.js script executable
+          chmod +x hello.js
+        # Run hello.js
+          node hello.js
+        # From a second terminal check status with curl
+          curl http://localhost:8080
 
