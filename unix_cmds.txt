@@ -45,6 +45,15 @@
     
         # Find size of dir
         du -sh /path/to/dir/
+
+        # Make script executable
+        chmod +x
+
+        # Change ownership of file
+        sudo chown {username}:{usergroup} {filename.txt}
+
+        # Change ownership of entire directory
+        sudo chown -R {username}:{usergroup} {filename.txt}
  
         ## Find files held open by process ##
           # find proc id (pid)
