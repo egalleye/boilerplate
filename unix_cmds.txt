@@ -65,14 +65,21 @@
     # Get more detail on a particular IP
     nmap -O ip_addr_of_target
 
-    # Find open ports
-    netstat -anup
+    ## Find open ports
+      # list port 
+      netstat -anup
+      # list port 
+      netstat -tlupn
+      # List protocol name
+      netstat -lptu
+
+      # List all open files 
+      sudo lsof -i
 
 
 #### OS ####
     # Details of OS 
     uname -a
-    # lsof -a
 
 #### git ####
     #### Starting up ####
