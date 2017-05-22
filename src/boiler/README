@@ -1,0 +1,9 @@
+## This dir is intended to hold mostly generic/all-purpose scripts
+
+## Running hello.js
+  # Make hello.js script executable
+    chmod +x hello.js
+  # Run hello.js
+    node hello.js
+  # From a second terminal check status with curl 
+    curl http://localhost:8080
