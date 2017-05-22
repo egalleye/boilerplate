@@ -116,4 +116,15 @@
         sudo apt-get update 
         sudo apt-get install google-chrome-stable
 
+    ## Install latex ##
+      # Big package so I didn't include in the main install
+        sudo apt-get install -y texlive-full
+      # Optional install texmaker (editor if you don't like vi)
+        sudo apt-get install -y texmaker
+      # Install .pdf reader (kde flavor)
+        sudo apt-get install -y okular
+      # or (gnome flavor)
+        sudo apt-get install -y evince
+
+    
 
