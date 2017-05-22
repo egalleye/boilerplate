@@ -1,0 +1,47 @@
+# This is a guide to setting up a Debian system so that it's up to speed for dev
+
+# Update system 
+sudo apt-get update && sudo apt-get upgrade -y;
+# Install vim cuz it's key to all
+sudo apt-get install -y git vim
+
+# Add yourself to sudoers properly (take out password prompt)
+sudo vi /etc/sudoers
+# Add the following to the bottom of screen
+    """
+    egall ALL=(ALL) NOPASSWD: ALL
+    """
+# Grab the handy tools they didn't install
+sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc
+# For webserver 
+sudo apt-get install -y nginx postgresql postgresql-contrib
+
+#### Automatic Security updates ####
+    
+    # Install necessary packages
+    sudo apt-get install -y unattended-upgrades apt-listchanges
+
+    # Edit file and add your email on problematic state
+    sudo vi /etc/apt/apt.conf.d/50unattended-upgrades 
+
+    """
+    Unattended-Upgrade::Mail "username@mail.com";
+    """
+
+    # Create 20auto-upgrades file
+    sudo dpkg-reconfigure -plow unattended-upgrades
+
+    # NOTE: Check the log after a day or two to verify
+    sudo vi /var/log/unattended-upgrades/*
+
+    
+#### SSH setup ####
+  
+    # Create .ssh directory
+    mkdir ~/.ssh/
+    cd ~/.ssh/
+    # Generate public/private keypair 
+    ssh-keygen -t rsa
+    # Copy id over for passwordless ssh other places
+    ssh-copy-id username@otherservers.ip
+
