@@ -109,6 +109,10 @@
        ## AWK ##
           # TODO
 
+       #### Misc ####
+         # BIOS info
+           sudo dmidecode
+
 #### ssh ####
     # Copy public keys to different computer (Not available on all systems)
       ssh-copy-id username@
