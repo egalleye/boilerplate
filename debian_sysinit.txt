@@ -3,19 +3,21 @@
 # NOTE: If any of these commands prompt you accept defaults unless I specify otherwise
 
 # Update system 
-sudo apt-get update && sudo apt-get upgrade -y;
+  sudo apt-get update && sudo apt-get upgrade -y;
 # Install vim cuz it's key to all
-sudo apt-get install -y git vim
+  sudo apt-get install -y git vim
 
 # Add yourself to sudoers properly (take out password prompt)
-sudo vi /etc/sudoers
+  sudo vi /etc/sudoers
 # Add the following to the bottom of screen
     """
     egall ALL=(ALL) NOPASSWD: ALL
     """
 # Grab the handy tools they didn't install
-sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc linux-tools-4.8.0-34-generic build-essential
-# For webserver 
+  sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc linux-tools-4.8.0-34-generic build-essential
+
+# Create scratch dir
+  mkdir ~/scratch
 
 #### Automatic Security updates ####
     
@@ -97,4 +99,9 @@ sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-
           node hello.js
         # From a second terminal check status with curl
           curl http://localhost:8080
+      ## Install D3 graphing lib ##
+        # Install lib
+        npm install d3
+        npm install requirejs
+        
 
