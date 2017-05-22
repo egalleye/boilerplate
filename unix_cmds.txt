@@ -6,6 +6,7 @@
         # ctrl-c kills current proc
         # ctrl-u paired with ctrl-y will cut/paste your current cmd on cli
         # ctrl-a for start of line
+        # ctrl-r reverse search for whatever you start typing
 
     #### vi tips ####
         # Save file when denied because of lack of sudo privileges
