@@ -38,6 +38,16 @@
     # Find size of dir
     du -sh /path/to/dir/
 
+#### ssh ####
+    # Copy public keys to different computer (Not available on all systems)
+    ssh-copy-id username@
+
+    # Gangster way of copying public keys to different computer
+    cat ~/.ssh/id_rsa.pub | ssh username@the.target.ip.addr 'cat >> ~/.ssh/authorized_keys'
+
+    #### ssh config ####
+    #TODO
+
 #### Compiling ####
     #### C ####
     # Compile .c file basic
