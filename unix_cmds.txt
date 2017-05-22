@@ -35,6 +35,9 @@
     # Untar a directory
     tar -xzvf dir.tar.gz
 
+    # Find size of dir
+    du -sh /path/to/dir/
+
 #### Compiling ####
     #### C ####
     # Compile .c file basic
