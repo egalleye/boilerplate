@@ -63,6 +63,7 @@
         # Configure Firewall
           sudo ufw allow ssh
           sudo ufw allow 'Nginx HTTP'
+          sudo ufw allow 'Nginx HTTPS'
   
       # Enable nginx
         sudo systemctl enable nginx
