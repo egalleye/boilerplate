@@ -1,19 +1,20 @@
 import psycopg2
 
+def color_print(print_str):
+    print('\x1b[3;31;40m' + print_str + '\x1b[0m')
+
+
 def pg_connect():
     try:
-        connect_str = "dbname='burnintest' user='postgres' host='localhost' " + \
+        db_connect_str = "dbname='brnintest' user='postgres' host='localhost' " + \
                       "password='!0ngString'"
         # use our connection values to establish a connection
-        conn = psycopg2.connect(connect_str)
+        conn = psycopg2.connect(db_connect_str)
         # create a psycopg2 cursor that can execute queries
         cursor = conn.cursor()
-        # create a new table with a single column called "name"
-        #cursor.execute("""CREATE TABLE tutorials (name char(40));""")
-        # run a SELECT statement - no data in there, but we can try it
     except Exception as e:
-        print("Uh oh, can't connect. Invalid dbname, user or password?")
-        print(e)
+        color_print("Uh oh, can't connect. Invalid dbname, user or password?")
+        color_print(colors.red("Error msg:\n{0}".format(e)))
     return cursor
 
 def pg_select(cursor):
@@ -21,12 +22,11 @@ def pg_select(cursor):
         cursor.execute("""SELECT * from burnin_table""")
         rows = cursor.fetchall()
         for row in rows:
-            print(row)
+            color_print(row)
     except Exception as e:
-        print("Uh oh, can't connect. Invalid dbname, user or password?")
-        print(e)
+        color_print("Uh oh, can't connect. Invalid dbname, user or password?")
+        color_print("Error msg:\n{0}".format(e))
 
 if __name__ == "__main__":
-    print("whattup world!")
     cursor = pg_connect()
     pg_select(cursor)
