@@ -1,0 +1,23 @@
+#### SQL commands ####
+   # View contents of table
+    SELECT * FROM table_name;
+   # View contents of table depending on {constraints}
+    SELECT * FROM table_name WHERE {constraints}
+
+   # Insert row into table
+    INSERT INTO burnin_table (hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested) VALUES (0025
+
+#### PSQL ####
+   ## Create TABLE
+      CREATE TABLE my_tab (
+        hrdwr_mac macaddr PRIMARY KEY,
+        proj_name char(15) NOT NULL,
+        sys_serial char(15) NOT NULL,
+        memsize integer NOT NULL,
+        position smallint NOT NULL,
+        date_tested timestamp NOT NULL);
+
+   # Display Table
+     \dt 
+   # Display connection info
+     \conninfo
