@@ -23,6 +23,10 @@
           :%s/^    //gc
 
         ## indentation ##
+          # Indent in visual mode
+            [shift]-V # Then scroll up or down 
+            '>' adds indent
+            '<' subs indent
           # indent from current line to endoffile
            =G
           # indent current line
