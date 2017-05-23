@@ -5,7 +5,9 @@
     SELECT * FROM table_name WHERE {constraints}
 
    # Insert row into table
-    INSERT INTO burnin_table (hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested) VALUES (0025
+    INSERT INTO burnin_table (hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested) VALUES (0025904C910C', 'test1
+', '1234567890abcde', 24730272, 1, now());
+
 
 #### PSQL ####
    ## Create TABLE
