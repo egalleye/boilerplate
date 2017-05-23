@@ -26,9 +26,10 @@ def pg_connect(db_name, db_user, db_host, db_password):
         print("Error msg:\n{0}".format(e))
     return cursor
 
-def pg_select_all(cursor):
+def pg_select_all(db_table, cursor):
     try:
-        cursor.execute("""SELECT * from burnin_table""")
+        pg_select_str = "SELECT * FROM " + db_table
+        cursor.execute(pg_select_str)
         rows = cursor.fetchall()
         for row in rows:
             print(row)
@@ -36,10 +37,11 @@ def pg_select_all(cursor):
         color_print("pg_select() failed")
         print("Error msg:\n{0}".format(e))
 
-def pg_insert(db_name, cursor):
+def pg_insert(db_table, cursor):
     print("dbname " + db_name)
     try:
-        cursor.execute("""INSERT INTO " + db_name+ " """)
+        pg_select_str = "INSERT " + db_table
+        cursor.execute(pg_select_str)
         rows = cursor.fetchall()
         for row in rows:
             print(row)
@@ -53,7 +55,8 @@ if __name__ == "__main__":
     db_user = "postgres"
     db_host = "localhost"
     db_password = "!0ngString"
+    db_table = "burnin_table"
     cursor = pg_connect(db_name, db_user, db_host, db_password)
-    pg_select_all(cursor)
+    pg_select_all(db_table, cursor)
     print("Inserting shit!")
     #pg_insert(db_name, cursor)
