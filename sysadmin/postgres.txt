@@ -21,3 +21,14 @@
      \dt 
    # Display connection info
      \conninfo
+
+#### psycopg2 ####
+  ## init ##
+    # Edit pg_hba.conf, found under /etc/postgresql/versionx.x/main/pg_hba.conf
+      vi /etc/postgresql/9.5/main/pg_hba.conf
+        # Change METHOD md5 => trust
+        """
+        # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+        host    all         all         127.0.0.1/32         trust
+        """
+    
