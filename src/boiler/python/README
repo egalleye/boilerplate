@@ -1,0 +1,4 @@
+NOTE: There a python directory in boilerplate/src/sql/postgres/psycopg2/ 
+Those files all deal with postgres so I thought it to be more appropriate 
+to put them over there. 
+Run create_links.sh from this directory to have them added here
