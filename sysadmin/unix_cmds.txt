@@ -22,6 +22,17 @@
         # Remove 4 leading spaces to each line
           :%s/^    //gc
 
+        ## indentation ##
+          # indent from current line to endoffile
+           =G
+          # indent current line
+           ==
+          # indent n lines below current line (n is number)
+           n=
+          # indent block of code (from braces)
+           =%
+
+
     #### UNIX ####
         
         # Change to directory 
