@@ -129,6 +129,12 @@
            sudo dmidecode
 
 #### ssh ####
+    # New machine ssh setup
+     ssh egall@192.168.ip.addr 'mkdir ~/.ssh'
+     ssh egall@192.168.ip.addr 'chmod 0700 $HOME/.ssh'
+     cat ~/.ssh/id_rsa.pub | ssh egall@192.168.ip.addr 'cat >> ~/.ssh/authorized_keys'
+     ssh egall@192.168.ip.addr 'chmod 600 authorized_keys'
+
     # Copy public keys to different computer (Not available on all systems)
       ssh-copy-id username@
 
@@ -166,6 +172,11 @@
       # List all open files 
         sudo lsof -i
 
+    # Setup wifi via commandline
+    # NOTE: Checkout wpa_supplicant.txt in cwd 
+    # for config tips if this doesn't work for you
+      iwlist wlan0 scan
+      sudo wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant/wpa_supplicant.conf
 
 #### OS ####
     # Details of OS 
