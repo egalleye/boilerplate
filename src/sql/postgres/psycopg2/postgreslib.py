@@ -2,6 +2,7 @@ import psycopg2
 import binascii 
 import json
 import os
+import random
 
 # global declare
 conn = None
@@ -146,6 +147,18 @@ def read_file(db_schema):
             file_content_str += line
     return file_content_str
 
+# This function from minhazul-haque 
+# URL: https://gist.github.com/pklaus/9638536
+def rand_mac():
+    return "%02x:%02x:%02x:%02x:%02x:%02x" % (
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 255)
+        )
+
 def test_pg_create_table():
     global db_table
     global db_name
@@ -173,13 +186,12 @@ def test_pg_insert():
     global db_password
     global json_file
     row_range_start = 0
-    row_range_end = 1
+    row_range_end = 31
 
     table_header = "lan1_mac, lan1_ip, rack_location, all_nics_mac, all_nics_chipset, all_nics_bandwidth, bmc_mac, bmc_ip, bmc_fru_tag, cpu_model, cpu_quality, cpu_current_speed, cpu_temp ,memeory_model, memory_quantity, memory_size, memory_current_speed, hdd_models, hdd_quantity, hdd_bandwidth, hdd_iops, gpu_model, gpu_quantity, mb_model, mb_serial, pcie_slot, pcie_device, power_supply_model, power_supply_quantity, power_supply_status, fan_model, fan_quantity, fan_speed, system_model, system_sn, system_temperature, system_uid_status, system_power_consumption, system_location, chassis_model, chassis_sn, ipmi_event, mce_log, bios_version, bios_date, ipmi_firmware_version, ipmi_firmware_date, testing_apps_list, current_running_app, app_starting_time, app_ending_time, app_status, app_result, app_logfile_location, final_result"
     #insert_vals = "'0025904C91cc', 'test7', '1234567890abcdk', 24730272, 7, now()"
     seqchar0 = 'a'
     # Setup to auto insert with random vals
-    test_mac = "002590"
     test_text = "testtxt"
     test_serial = "1234567890abcd"
     test_memsize = "24730272"
@@ -189,14 +201,13 @@ def test_pg_insert():
         position = str(iter)
         mac_ext = binascii.b2a_hex(os.urandom(3)).decode("utf-8")
         seqchar0 = chr(iter + 100)
-        test_mac += mac_ext
-        insertvals = "'" + test_mac + "', "  \
+        insertvals = "'" + rand_mac() + "', "  \
                      + "'" + test_ip + "', " \
                      + "'" + test_text + "', " \
-                     + "'" + test_mac + "', "  \
+                     + "'" + rand_mac() + "', "  \
                      + "'" + test_text + "', " \
                      + "'" + test_text + "', " \
-                     + "'" + test_mac + "', "  \
+                     + "'" + rand_mac() + "', "  \
                      + "'" + test_ip + "', " \
                      + "'" + test_text + "', " \
                      + "'" + test_text + "', " \
@@ -247,7 +258,7 @@ def test_pg_insert():
                      + "'" + test_text + "'"
 
         pg_insert(db_table, table_header, insertvals)
-        #print(insertvals)
+        print(insertvals)
 
 
 if __name__ == "__main__":
