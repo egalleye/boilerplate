@@ -17,7 +17,6 @@ def pg_create_table(table_name, schema_str, db_name, db_user, db_host, db_passwo
     global conn
     global cursor
     pg_createtable_str = "CREATE TABLE " + table_name + " (\n" + schema_str + ");"
-    print(pg_createtable_str)
     try:
         db_connect_str = "dbname='" + db_name \
                          +"' user='" + db_user \
@@ -164,7 +163,8 @@ def test_pg_create_table():
 
 
 if __name__ == "__main__":
-    test_pg_create_table()
+    # Uncomment to test pg_create_table()
+    #test_pg_create_table()
     """
     table_header = "hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested"
     insert_vals = "'0025904C91cc', 'test7', '1234567890abcdk', 24730272, 7, now()"
