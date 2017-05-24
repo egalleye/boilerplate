@@ -70,7 +70,7 @@ def pg_dump_json(dumpfile, ds_table):
         os.remove(dumpfile)
     except OSError:
         pass
-    json_fileheader = "date-tested\tposition"
+    json_fileheader = "hardware-mac\tdate-tested\tposition"
     with open(dumpfile, 'a') as jsonfile:
         jsonfile.write(json_fileheader + "\n")
         try:
@@ -96,7 +96,7 @@ def pg_dump_json(dumpfile, ds_table):
                 #print("hrdwr_mac = {0} position = {1}".format(hrdwr_mac, position))
                 #prejson_tup = (hrdwr_mac, position)
                 #json_entry = json.dumps(prejson_tup)
-                jsonfile.write(date_tested.strftime('%x') + "\t" + str(position) + "\n")
+                jsonfile.write(hrdwr_mac + "\t" + date_tested.strftime('%x') + "\t" + str(position) + "\n")
 
                 
         except Exception as e:
