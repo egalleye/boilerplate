@@ -6,6 +6,37 @@ import os
 # global declare
 conn = None
 cursor = None
+db_name = "burnintest"
+db_user = "postgres"
+db_host = "localhost"
+db_password = "xxxxxxxxxxxx"
+db_table = "burnin_table_a"
+
+
+def pg_create_table(table_name, schema_str, db_name, db_user, db_host, db_password):
+    global conn
+    global cursor
+    pg_createtable_str = "CREATE TABLE " + table_name + " (\n" + schema_str + ");"
+    print(pg_createtable_str)
+    try:
+        db_connect_str = "dbname='" + db_name \
+                         +"' user='" + db_user \
+                         + "' host='" + db_host \
+                         + "' " + "password='" + db_password + "'"
+        # use our connection values to establish a connection
+        conn = psycopg2.connect(db_connect_str)
+        # create a psycopg2 cursor that can execute queries
+        cursor = conn.cursor()
+        cursor.execute(pg_createtable_str)
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        color_print("pg_connect() failed")
+        print("Error msg:\n{0}".format(e))
+    return 0
+
+
 
 """
 pg_connect()
@@ -108,13 +139,33 @@ def pg_dump_json(dumpfile, ds_table):
 def color_print(print_str):
     print('\x1b[3;31;40m' + "ERROR: " + print_str + '\x1b[0m')
 
+def read_file(db_schema):
+    file_content_str = ""
+    with open(db_schema, "r") as schema_fd:
+        for line in schema_fd:
+            if (line.isspace()):
+                continue
+            file_content_str += line
+    return file_content_str
+
+def test_pg_create_table():
+    global db_table
+    global db_name
+    global db_user
+    global db_host
+    global db_password
+    
+    # NOTE: DB schema should be the full schema between CREATE TABLE ( <==> );
+    db_schema = "database_schema.txt"
+    schema_str = read_file(db_schema)
+    pg_create_table(db_table, schema_str, db_name, db_user, db_host, db_password)
+
+
+
 
 if __name__ == "__main__":
-    db_name = "burnintest"
-    db_user = "postgres"
-    db_host = "localhost"
-    db_password = "!0ngString"
-    db_table = "burnin_table"
+    test_pg_create_table()
+    """
     table_header = "hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested"
     insert_vals = "'0025904C91cc', 'test7', '1234567890abcdk', 24730272, 7, now()"
     retval = 0
@@ -123,7 +174,6 @@ if __name__ == "__main__":
     
     retval = pg_connect(db_name, db_user, db_host, db_password)
     pg_dump_json(json_file, db_table)
-    """
     # Print out entire table
     pg_select_all(db_table)
 
