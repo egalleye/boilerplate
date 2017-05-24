@@ -35,6 +35,18 @@
            n=
           # indent block of code (from braces)
            =%
+    #### tmux ####
+        # Start new session called new_session
+          tmux new -s new_session
+        # Create vertical terminal seperator
+	  [ctrl-b] %
+	## Movement ##
+	  # Move next pane
+	    [ctrl-b] n
+	  # Move previous pane
+	    [ctrl-b] p
+	  # Move to other side of pane (if pane is split)
+	    [ctrl-b] o
 
 
     #### UNIX ####
