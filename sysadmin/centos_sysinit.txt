@@ -1,0 +1,37 @@
+## Install guest additions
+> wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+> rpm -Uvh rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+> yum --enablerepo rpmforge install dkms
+> yum groupinstall "Development Tools"
+> yum install kernel-devel
+# from VM Devices menu select Install Guest Additions CD
+> cd /media/VBOXADDITIONS_4.3.26_98988
+> sudo sh VBoxLinuxAdditions.run
+# done.
+
+## Install Desktop and other such utils
+> yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts" "Graphical Administration Tools" "Internet Browser" "General Purpose Desktop" "Compatibility libraries" "KDE desktop"
+
+# Optional
+> yum -y groupinstall "Office Suite and Productivity"
+
+> yum -y groupinstall "Graphics Creation Tools"
+
+# Change inittab
+
+> vi /etc/inittab
+# Change the following line
+# id:3:initdefault:
+# to
+# id:5:initdefault:
+
+# Reboot
+> init 6
+# done.
+
+## Configure networking
+> vi /etc/sysconfig/network-scripts/ifcfg-eth0
+# Change the following
+# ONBOOT="no"
+# to
+# ONBOOT="yes"
