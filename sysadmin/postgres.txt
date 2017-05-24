@@ -10,6 +10,10 @@
 
 
 #### PSQL ####
+   # Start psql shell
+     sudo -i -u postgres
+     psql
+
    ## Create TABLE
       CREATE TABLE my_tab (
         hrdwr_mac macaddr PRIMARY KEY,
