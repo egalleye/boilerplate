@@ -1,0 +1,6 @@
+# gdb a core
+
+> gdb /usr/hf/bin/hfds /tmp/core.xxxxxxxxx.xxxxx
+
+# Backtrace
+gdb> bt

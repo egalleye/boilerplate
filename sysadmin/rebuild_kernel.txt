@@ -1,0 +1,36 @@
+# from this guide
+http://www.crashcourse.ca/introduction-linux-kernel-programming/lesson-1-building-and-running-new-linux-kernel
+
+
+# install git-core libncurses5-dev
+
+# check following dirs for contents;
+
+/boot
+    vmlinuz-2.6.35-kwlug+: The compressed, bootable kernel image
+    initrd.img-2.6.35-kwlug+: The initial ram disk -- an early root filesystem that allows your kernel to bootstrap and get essential device drivers to get to the final, official root filesystem
+     config-2.6.35-kwlug+: The record of the configuration parameters for that kernel
+
+/lib/modules
+     module dirs
+
+
+# get linux src
+cd /usr/src/
+git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git linux-2.6
+cd linux-2.6
+cp /boot/config-2.6.32-22-generic .config
+yes '' | make oldconfig 
+make
+sudo make modules_install
+sudo make install
+sudo update-initramfs -c -k 2.6.35-crash+
+sudo update-grub
+
+# check for:
+# 1. Does your /boot directory have a new kernel, initrd image file and config file corresponding to your build?
+# 2. Is there a new modules directory for your kernel under /lib/modules?
+# 3.Has your GRUB configuration file been updated to include an entry or entries for your new kernel?
+
+reboot
+

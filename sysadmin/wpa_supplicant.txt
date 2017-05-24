@@ -1,0 +1,21 @@
+# First configure your wpa_supplicant.conf, found in /etc/wpa_supplicant/
+
+# Find wireless access point name (NOTE: Your wifi interface may not be named wlan0)
+> iwlist wlan0 scan
+# Connect to wireless access point
+> sudo wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant/wpa_supplicant.conf
+
+
+# NOTE: You should probably just change the network{} section, I never touch top part
+#### wpa_supplicant.conf ####
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=GB
+
+network={
+        ssid="mywifinetwork"
+        psk="myreallyreallylongpasswordthat'shardtotypebutissecurezzzzz"
+        key_mgmt=WPA-PSK
+}
+
+#### EOF ####

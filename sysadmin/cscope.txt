@@ -1,0 +1,17 @@
+#### Setup cscope for a project ####
+# Quit with ctrl-d
+
+## Create a file with all of the projects .c and .h files
+> find /path/to/proj/ -name '*.c' -o -name '*.h' > /home/esteggall/cscope/proj/cscope.files
+
+## Build cscope database wtih all the project files
+> cd /home/esteggall/cscope/proj/
+# -b = build database, -q = makes search faster -k = optional, doesn't search through other libs
+> cscope -b -q 
+
+## Run cscope
+# -d = run database
+> cscope -d
+
+#### Vim setup ####
+# TODO

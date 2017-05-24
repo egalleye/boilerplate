@@ -1,0 +1,21 @@
+# Create a new ssh dir
+mkdir -p ~/.ssh
+
+# Jump into new ssh dir
+cd ~/.ssh
+
+# Generate new ssh key pair using RSA 
+ssh-keygen -t rsa
+
+# Copy your new key over to other computers
+cat ~/.ssh/id_rsa.pub | ssh me@my_ip_goes_here 'cat >> ~/.ssh/authorized_keys'
+
+# Create your own authorized_keys file and set permissions
+touch ~/.ssh/authorized_keys
+
+
+
+# Set proper permissions on ssh
+chmod 0700 ~/.ssh
+chmod 0642 ~/.ssh/authorized_keys
+

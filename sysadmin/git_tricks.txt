@@ -1,0 +1,2 @@
+# find which user holds current box
+ssh -T -ai ~/.ssh/id_rsa git@github.com

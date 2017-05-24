@@ -1,0 +1,5 @@
+# Get backtrace of all threads running
+> thread apply all bt
+
+# Switch to specific thread
+> thread [thread_num]
