@@ -93,40 +93,46 @@ def pg_insert(db_table, table_header, insert_vals):
         color_print("pg_insert() failed")
         print("Error msg:\n{0}".format(e))
 
-def pg_dump_json(dumpfile, ds_table):
+def pg_dump_json(dumpfile, ds_table, json_header):
     global cursor
     # remove old json file 
     try:
         os.remove(dumpfile)
     except OSError:
         pass
-    json_fileheader = "hardware-mac\tdate-tested\tposition"
     with open(dumpfile, 'a') as jsonfile:
-        jsonfile.write(json_fileheader + "\n")
+        jsonfile.write(json_header + "\n")
         try:
             cursor = conn.cursor()
             pg_select_str = "SELECT * FROM " + db_table
             cursor.execute(pg_select_str)
             rows = cursor.fetchall()
-            hrdwr_mac = ""
-            proj_name = ""
-            sys_serial = ""
-            memsize = 0
-            position = 0
-            date_tested = ""
-            prejson_tup = ("", 0)
+            #hrdwr_mac = ""
+            #proj_name = ""
+            #sys_serial = ""
+            #memsize = 0
+            #position = 0
+            #date_tested = ""
+            #prejson_tup = ("", 0)
             for row in rows:
-                hrdwr_mac = row[0]
-                proj_name = row[1]
-                sys_serial = row[2]
-                memsize = row[3]
-                position = row[4]
-                date_tested = row[5]
+                #print(row)
+                row_str_format = ""
+                for item in row:
+                    row_str_format += str(item) + '\t'
+                row_str_format += '\n'
+                print(row_str_format)
+                jsonfile.write(row_str_format)
+                #hrdwr_mac = row[0]
+                #proj_name = row[1]
+                #sys_serial = row[2]
+                #memsize = row[3]
+                #position = row[4]
+                #date_tested = row[5]
                 # print("hrdwr_mac = {0} proj_name = {1} sys_serial = {2} memsize = {3} position = {4} date_tested = {5}".format(hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested))
                 #print("hrdwr_mac = {0} position = {1}".format(hrdwr_mac, position))
                 #prejson_tup = (hrdwr_mac, position)
                 #json_entry = json.dumps(prejson_tup)
-                jsonfile.write(hrdwr_mac + "\t" + date_tested.strftime('%x') + "\t" + str(position) + "\n")
+                # jsonfile.write(hrdwr_mac + "\t" + date_tested.strftime('%x') + "\t" + str(position) + "\n")
 
                 
         except Exception as e:
@@ -261,6 +267,14 @@ def test_pg_insert():
         print(insertvals)
 
 
+
+def test_pg_dump_json():
+    global db_table
+    global json_file
+    json_header = "lan1_mac	lan1_ip	rack_location	all_nics_mac	all_nics_chipset	all_nics_bandwidth	bmc_mac	bmc_ip	bmc_fru_tag	cpu_model	cpu_quality	cpu_current_speed	cpu_temp ,memeory_model	memory_quantity	memory_size	memory_current_speed	hdd_models	hdd_quantity	hdd_bandwidth	hdd_iops	gpu_model	gpu_quantity	mb_model	mb_serial	pcie_slot	pcie_device	power_supply_model	power_supply_quantity	power_supply_status	fan_model	fan_quantity	fan_speed	system_model	system_sn	system_temperature	system_uid_status	system_power_consumption	system_location	chassis_model	chassis_sn	ipmi_event	mce_log	bios_version	bios_date	ipmi_firmware_version	ipmi_firmware_date	testing_apps_list	current_running_app	app_starting_time	app_ending_time	app_status	app_result	app_logfile_location	final_result"
+    pg_dump_json(json_file, db_table, json_header)
+
+
 if __name__ == "__main__":
     # Uncomment to test pg_create_table()
     #test_pg_create_table()
@@ -268,14 +282,16 @@ if __name__ == "__main__":
     # Uncomment to test pg_connect()
     test_pg_connect()
 
-    # Uncomment to test pg_connect()
-    test_pg_insert()
+    # Uncomment to test pg_insert()
+    #test_pg_insert()
+    
+    # Uncomment to test pg_dump_json()
+    test_pg_dump_json()
     """
     table_header = "hrdwr_mac, proj_name, sys_serial, memsize, position, date_tested"
     insert_vals = "'0025904C91cc', 'test7', '1234567890abcdk', 24730272, 7, now()"
     retval = 0
     seqchar0 = 'a'
-    json_file = "burnintest.json"
     
     retval = pg_connect(db_name, db_user, db_host, db_password)
     pg_dump_json(json_file, db_table)
