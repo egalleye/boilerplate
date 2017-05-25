@@ -37,4 +37,6 @@
         # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
         host    all         all         127.0.0.1/32         trust
         """
+    # Update postgres with new config
+        sudo systemctl postgresql restart
     

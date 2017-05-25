@@ -1,5 +1,4 @@
-# This is a guide to setting up a Debian system so that it's up to speed for dev
-
+# This is a guide to setting up a Debian system so that it's up to speed for dev 
 # NOTE: If any of these commands prompt you accept defaults unless I specify otherwise
 
 # Update system 
@@ -83,7 +82,7 @@
     ## Install postgres ##
         sudo apt-get install -y postgresql postgresql-contrib
       # Create new user account (with same name as database)
-        adduser tester
+        adduser pg_db
       # Change to postgres user
         sudo -i -u postgres
        
@@ -91,15 +90,30 @@
         createuser --interactive # yes to superuser
   
       # Create database
-        createdb {testdb}
+        createdb {pg_db}
       # Open postgres cmd prompt
         psql
+      # or
+        psql {pg_db}
       # Fromp psql prompt you can check connection
         \conninfo
       # View tables
         \dt 
       # Quit
         \q
+      # pg_hba.conf
+        #### psycopg2 ####
+          ## init ##
+            # Edit pg_hba.conf, found under /etc/postgresql/versionx.x/main/pg_hba.conf
+              vi /etc/postgresql/9.5/main/pg_hba.conf
+                # Change METHOD md5 => trust
+                """
+                # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+                host    all         all         127.0.0.1/32         trust
+                """
+            # Update postgres with new config
+              sudo systemctl postgresql restart
+
 
     ## Install Node.js ##
         curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
