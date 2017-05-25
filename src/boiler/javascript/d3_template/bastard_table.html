@@ -24,12 +24,9 @@
               .selectAll('th')
               .data(table_header)
               .enter().append('th')
+                .style("background-color", "grey")
                 .style("border", "1px black solid")
                 .style("padding", "5px")
-                .on("mouseover", function(){d3.select(this)
-                    .style("background-color", "aliceblue")})
-                .on("mouseout", function(){d3.select(this)
-                    .style("background-color", "white")})
                 .text(function (table_header) { return table_header; });
 
             // create a row for each object in the data
