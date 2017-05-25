@@ -37,7 +37,7 @@ def pg_create_table(table_name, schema_str, db_name, db_user, db_host, db_passwo
         """
         """
     except Exception as e:
-        color_print("pg_connect() failed")
+        color_print("pg_create_table() failed")
         print("Error msg:\n{0}".format(e))
     return 0
 
@@ -89,7 +89,6 @@ def pg_insert(db_table, table_header, insert_vals):
     global cursor
     try:
         pg_select_str = "INSERT INTO " + db_table + " (" + table_header + ")  VALUES (" + insert_vals + ");"
-        print(pg_select_str)
         # Comment next two lines for testing
         cursor.execute(pg_select_str)
         conn.commit()
@@ -168,89 +167,78 @@ def test_pg_connect():
     global db_password
     retval = pg_connect(db_name, db_user, db_host, db_password)
 
+"""
+parse_schema()
+Helper function to parse the database_schema
+Inputs: None
+Outputs: tups of (table names, table types) that should be 1:1
+"""
+def parse_schema():
+    global db_schema_file
+    table_names = []
+    table_types = []
+    with open(db_schema_file, 'r') as schema_fd:
+        for line in schema_fd:
+            # allow for empty lines without barfing...
+            if (len(line.strip()) == 0):
+                continue
+            line = line.replace(',', '')
+            line = line.lstrip()
+            line = line.rstrip()
+            splitline = line.split(' ')
+            varname = splitline[0]
+            vartype = splitline[1]
+            vartype = vartype.strip()
+            table_names.append(varname)
+            table_types.append(vartype)
+    if (len(table_names) != len(table_types)): 
+        color_print("Mismatch between types and variable names in db schema")
+        return None
+    return (table_names, table_types)
+
+def create_row(table_types):
+    values_row = ""
+    fake_text = "testtxt"
+    fake_serial = "1234567890abcd"
+    fake_memsize = "24730272"
+    fake_ip = "192.168.0.111"
+    fake_date = "now()"
+    fake_int = 24
+
+    for dbtype in table_types:
+        if (dbtype == "text"):
+            values_row += "'" + fake_text + "', "
+        elif (dbtype == "integer"):
+            values_row += str(fake_int) + ", "
+        elif (dbtype == "date"):
+            values_row += "now()" + ", " 
+        elif (dbtype == "timestamp"):
+            values_row += "now()" + ", " 
+        elif (dbtype == "macaddr"):
+            values_row +=  "'" + rand_mac() + "'" + ", " 
+        elif (dbtype == "inet"):
+            values_row +=  "'" + fake_ip + "'" + ", " 
+        else:
+            color_print("ERROR: Unknown row type!" + dbtype)
+    # Hack to remove trailing ', ' that is added by for loop
+    values_row = values_row.strip().rstrip(',')
+    return values_row
+                
+
 def test_pg_insert():
     global db_table
-    global db_name
-    global db_user
-    global db_host
-    global db_password
-    global json_file
     row_range_start = 0
     row_range_end = 31
-
-    table_header = "lan1_mac, lan1_ip, rack_location, all_nics_mac, all_nics_chipset, all_nics_bandwidth, bmc_mac, bmc_ip, bmc_fru_tag, cpu_model, cpu_quality, cpu_current_speed, cpu_temp ,memeory_model, memory_quantity, memory_size, memory_current_speed, hdd_models, hdd_quantity, hdd_bandwidth, hdd_iops, gpu_model, gpu_quantity, mb_model, mb_serial, pcie_slot, pcie_device, power_supply_model, power_supply_quantity, power_supply_status, fan_model, fan_quantity, fan_speed, system_model, system_sn, system_temperature, system_uid_status, system_power_consumption, system_location, chassis_model, chassis_sn, ipmi_event, mce_log, bios_version, bios_date, ipmi_firmware_version, ipmi_firmware_date, testing_apps_list, current_running_app, app_starting_time, app_ending_time, app_status, app_result, app_logfile_location, final_result"
-    #insert_vals = "'0025904C91cc', 'test7', '1234567890abcdk', 24730272, 7, now()"
-    seqchar0 = 'a'
-    # Setup to auto insert with random vals
-    test_text = "testtxt"
-    test_serial = "1234567890abcd"
-    test_memsize = "24730272"
-    test_ip = "192.168.0.111"
-    test_date = "now()"
-    for iter in range(row_range_start, row_range_end):
-        position = str(iter)
-        mac_ext = binascii.b2a_hex(os.urandom(3)).decode("utf-8")
-        seqchar0 = chr(iter + 100)
-        insertvals = "'" + rand_mac() + "', "  \
-                     + "'" + test_ip + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + rand_mac() + "', "  \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + rand_mac() + "', "  \
-                     + "'" + test_ip + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + position + ", " \
-                     + position + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + position + ", " \
-                     + position + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + position + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + position + ", " \
-                     + "'" + test_text + "', " \
-                     + position + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + test_date + ", " \
-                     + "'" + test_text + "', " \
-                     + test_date + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + test_date + ", " \
-                     + test_date + ", " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "', " \
-                     + "'" + test_text + "'"
-
+    (table_names, table_types) = parse_schema()
+    insert_str = ""
+    table_header = ", ".join(table_names)
+    table_header.strip().rstrip(',')
+    for itor in range(row_range_start, row_range_end):
+        insertvals = create_row(table_types)
+        #insert_str = "INSERT INTO burnin_table_a (" + table_header + ") VALUES (" + row + ");"
         pg_insert(db_table, table_header, insertvals)
-        print(insertvals)
 
-
+        print(insert_str)
 
 def test_pg_dump_json():
     global db_table
@@ -261,13 +249,13 @@ def test_pg_dump_json():
 
 if __name__ == "__main__":
     # Uncomment to test pg_create_table()
-    test_pg_create_table()
+    #test_pg_create_table()
 
     # Uncomment to test pg_connect()
-    #test_pg_connect()
+    test_pg_connect()
 
     # Uncomment to test pg_insert()
-    #test_pg_insert()
+    test_pg_insert()
     
     # Uncomment to test pg_dump_json()
     #test_pg_dump_json()
