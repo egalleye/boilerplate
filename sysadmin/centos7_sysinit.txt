@@ -1,7 +1,9 @@
 ## Install guest additions
-> wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-> rpm -Uvh rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-> yum --enablerepo rpmforge install dkms
+# Get epel
+sudo yum install -y epel-release
+# Enable epel and install dkms
+sudo yum --enablerepo=epel install -y dkms
+# Install development tools
 > yum groupinstall "Development Tools"
 > yum install kernel-devel
 # from VM Devices menu select Install Guest Additions CD

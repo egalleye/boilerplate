@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, td {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<p> Very simple Table </p>
+
+<table id="myTable">
+  <tr>
+    <td>MAC Addr</td>
+    <td>Date</td>
+    <td>Position</td>
+  </tr>
+</table>
+<br>
+
+<button onclick="myFunction()">Generate!</button>
+<script type="text/javascript" src="./d3/d3.js"></script>
+
+<script>
+function myFunction() {
+    var table = document.getElementById("myTable");
+    var num_rows = 1;
+    var iter = 0;
+    d3.tsv("burnintest.tsv", function(data) {
+        for (iter = 0; iter < data.length; iter++) {
+            console.log(data[iter]);
+            tsvrow = data[iter];
+            var position = tsvrow.position;
+            var hrdwr_mac = tsvrow.hardware_mac;
+            var date_tested = tsvrow.date_tested;
+            var row = table.insertRow(num_rows);
+            var col_hrdwr_mac = row.insertCell(0);
+            var col_datetested = row.insertCell(1);
+            var col_position = row.insertCell(2);
+ 
+            col_hrdwr_mac.innerHTML = hrdwr_mac;
+            col_datetested.innerHTML = date_tested;
+            col_position.innerHTML = tsvrow.position;
+            num_rows += 1;
+        }
+    });
+}
+</script>
+
+</body>
+</html>
