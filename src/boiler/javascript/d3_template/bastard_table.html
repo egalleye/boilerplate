@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script>
+        d3.text("bigburnintest.csv", function(error, datasetText) {
+          var parsedCSV = d3.csv.parseRows(datasetText);
+          var table_header = parsedCSV[0];
+          var table_rows = parsedCSV.splice(1, parsedCSV.length);
+          function tabulate(data, table_header) {
+                var table = d3.select('body').append('table')
+                var thead = table.append('thead')
+                var tbody = table.append('tbody');
+
+                // append the header row
+                thead.append('tr')
+                  .selectAll('th')
+                  .data(table_header)
+                  .enter().append('th')
+                    .style("border", "1px black solid")
+                    .style("padding", "5px")
+                    .on("mouseover", function(){d3.select(this).style("background-color", "aliceblue")})
+                    .on("mouseout", function(){d3.select(this).style("background-color", "white")})
+                    .text(function (column) { return column; });
+
+                // create a row for each object in the data
+                var rows = tbody.selectAll('tr')
+                  .data(table_rows)
+                  .enter()
+                  .append('tr');
+
+                // create a cell in each row for each column
+                var cells = rows.selectAll('td')
+                  .data(function(d) {return d;})
+                  .enter().append('td')
+                    .style("border", "1px black solid")
+                    .style("padding", "5px")
+                    .on("mouseover", function(){d3.select(this).style("background-color", "aliceblue")})
+                    .on("mouseout", function(){d3.select(this).style("background-color", "white")})
+                    .text(function (d) { return d});
+
+              return table;
+            }
+
+            // render the table(s)
+            tabulate(table_rows, table_header); // 2 column table
+        });
+
+    </script>
+  </body>
+</html>
