@@ -7,6 +7,10 @@
   </head>
   <body>
     <script>
+        // Took the original script idea from jfreels, many thanks for
+        // this code as it's allowing me to bridge the gap between
+        // normal scripting and d3 more easily
+        // https://gist.github.com/jfreels/6734025
         d3.text("bigburnintest.csv", function(error, datasetText) {
           var parsedCSV = d3.csv.parseRows(datasetText);
           var table_header = parsedCSV[0];
