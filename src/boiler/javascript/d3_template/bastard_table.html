@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <meta charset='utf-8'>
 <html>
@@ -27,7 +26,7 @@
                 .style("background-color", "grey")
                 .style("border", "1px black solid")
                 .style("padding", "5px")
-                .text(function (table_header) { return table_header; });
+                .text(function (d) { return d});
 
             // create a row for each object in the data
             var rows = tbody.selectAll('tr')
