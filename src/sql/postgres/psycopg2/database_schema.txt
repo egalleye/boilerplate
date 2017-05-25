@@ -51,6 +51,5 @@
     app_ending_time timestamp,
     app_status text,
     app_result text,
- 
     app_logfile_location text,
     final_result text
