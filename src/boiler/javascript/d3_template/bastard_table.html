@@ -6,12 +6,18 @@
   </head>
   <body>
     <script>
-        // Took the original script idea from jfreels, many thanks for
+        /* Took the original script idea from jfreels, many thanks for
         // this code as it's allowing me to bridge the gap between
         // normal scripting and d3 more easily
         // https://gist.github.com/jfreels/6734025
+        // EQS NOTE: I'm using two files right now but the
+        // database_schema.txt file isn't necessary once Reeann 
+        // okay's the schema
+        */
         d3.text("bigburnintest.csv", function(error, datasetText) {
+            d3.text("database_schema.txt", function(error, headertypes) {
             var parsedCSV = d3.csv.parseRows(datasetText);
+            var parsed_header = d3.csv.parseRows(headertypes);
             var table_header = parsedCSV[0];
             var table_rows = parsedCSV.splice(1, parsedCSV.length);
             var table = d3.select('body').append('table')
@@ -21,12 +27,12 @@
             // append the header row
             thead.append('tr')
               .selectAll('th')
-              .data(table_header)
+              .data(parsed_header)
               .enter().append('th')
                 .style("background-color", "grey")
                 .style("border", "1px black solid")
                 .style("padding", "5px")
-                .text(function (d) { return d});
+                .text(function (d) { return d[0] + '\n' + '(' + d[1] + ')'});
 
             // create a row for each object in the data
             var rows = tbody.selectAll('tr')
@@ -45,6 +51,7 @@
                 .on("mouseout", function(){d3.select(this)
                     .style("background-color", "white")})
                 .text(function (d) { return d});
+            });
 
         });
     </script>
