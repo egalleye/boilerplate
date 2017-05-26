@@ -1,6 +1,5 @@
 import psycopg2
 import binascii 
-import json
 import os
 import random
 
@@ -12,7 +11,7 @@ db_user = "postgres"
 db_host = "localhost"
 db_password = "xxxxxxxxxxxx"
 db_table = "burnin_table_a"
-json_file = "burnintest.json"
+csv_file = "burnin.csv"
 db_schema_file = "database_schema.txt"
 
 
@@ -96,15 +95,15 @@ def pg_insert(db_table, table_header, insert_vals):
         color_print("pg_insert() failed")
         print("Error msg:\n{0}".format(e))
 
-def pg_dump_json(dumpfile, ds_table, json_header):
+def pg_dump_csv(dumpfile, ds_table, csv_header):
     global cursor
-    # remove old json file 
+    # remove old csv file 
     try:
         os.remove(dumpfile)
     except OSError:
         pass
-    with open(dumpfile, 'a') as jsonfile:
-        jsonfile.write(json_header + "\n")
+    with open(dumpfile, 'a') as csvfile:
+        csvfile.write(csv_header + "\n")
         try:
             cursor = conn.cursor()
             pg_select_str = "SELECT * FROM " + db_table
@@ -113,10 +112,12 @@ def pg_dump_json(dumpfile, ds_table, json_header):
             for row in rows:
                 row_str_format = ""
                 for item in row:
-                    row_str_format += str(item) + '\t'
+                    row_str_format += str(item) + ", "
+                # Hack to get rid of trailing comma
+                row_str_format = row_str_format.strip().rstrip(',')
                 row_str_format += '\n'
                 print(row_str_format)
-                jsonfile.write(row_str_format)
+                csvfile.write(row_str_format)
                 
         except Exception as e:
             color_print("pg_select_all() failed")
@@ -240,11 +241,12 @@ def test_pg_insert():
 
         print(insert_str)
 
-def test_pg_dump_json():
+def test_pg_dump_csv():
     global db_table
-    global json_file
-    json_header = "lan1_mac	lan1_ip	rack_location	all_nics_mac	all_nics_chipset	all_nics_bandwidth	bmc_mac	bmc_ip	bmc_fru_tag	cpu_model	cpu_quality	cpu_current_speed	cpu_temp ,memeory_model	memory_quantity	memory_size	memory_current_speed	hdd_models	hdd_quantity	hdd_bandwidth	hdd_iops	gpu_model	gpu_quantity	mb_model	mb_serial	pcie_slot	pcie_device	power_supply_model	power_supply_quantity	power_supply_status	fan_model	fan_quantity	fan_speed	system_model	system_sn	system_temperature	system_uid_status	system_power_consumption	system_location	chassis_model	chassis_sn	ipmi_event	mce_log	bios_version	bios_date	ipmi_firmware_version	ipmi_firmware_date	testing_apps_list	current_running_app	app_starting_time	app_ending_time	app_status	app_result	app_logfile_location	final_result"
-    pg_dump_json(json_file, db_table, json_header)
+    global csv_file
+    (table_names, table_types) = parse_schema()
+    csv_header = ", ".join(table_names)
+    pg_dump_csv(csv_file, db_table, csv_header)
 
 
 if __name__ == "__main__":
@@ -255,10 +257,10 @@ if __name__ == "__main__":
     test_pg_connect()
 
     # Uncomment to test pg_insert()
-    test_pg_insert()
+    #test_pg_insert()
     
-    # Uncomment to test pg_dump_json()
-    #test_pg_dump_json()
+    # Uncomment to test pg_dump_csv()
+    test_pg_dump_csv()
 
 
 
