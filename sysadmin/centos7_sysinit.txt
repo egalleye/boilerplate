@@ -83,6 +83,8 @@
     # Set proper permissions on ssh
      chmod 0700 ~/.ssh
      chmod 0642 ~/.ssh/authorized_keys
+     chmod 600 ~/.ssh/config
+
 
     ## Change to high port ##
       # EQS NOTE: Change the highport to something in the range of 49152-65535
