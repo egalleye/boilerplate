@@ -40,6 +40,9 @@
       mkdir ~/develp
       mkdir ~/install
 
+    # Change hostname
+     hostnamectl set-hostname cool-hostname
+
 #### Automatic Security updates ####
     # install yum-cron
      sudo yum install -y yum-cron
