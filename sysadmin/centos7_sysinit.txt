@@ -1,40 +1,144 @@
-## Install guest additions
-# Get epel
-sudo yum install -y epel-release
-# Enable epel and install dkms
-sudo yum --enablerepo=epel install -y dkms
-# Install development tools
-> yum groupinstall "Development Tools"
-> yum install kernel-devel
-# from VM Devices menu select Install Guest Additions CD
-> cd /media/VBOXADDITIONS_4.3.26_98988
-> sudo sh VBoxLinuxAdditions.run
-# done.
 
-## Install Desktop and other such utils
-> yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts" "Graphical Administration Tools" "Internet Browser" "General Purpose Desktop" "Compatibility libraries" "KDE desktop"
-yum -y install wget
+#### init ####
+    # Centos7 usually starts without networking, start it
+      # Get ip addr
+       dhclient
+    ## Configure networking to start on boot
+      > vi /etc/sysconfig/network-scripts/ifcfg-eth0
+      # Change ONBOOT option from no to yes
+      # ONBOOT="yes"
 
-# Optional
-> yum -y groupinstall "Office Suite and Productivity"
+    # Install crucial packages 
+     sudo apt-get install -y git vim wget 
+    # Take off password prompt for sudo
+     sudo vi /etc/sudoers
 
-> yum -y groupinstall "Graphics Creation Tools"
+     """
+     egall ALL=(ALL) NOPASSWD: ALL
+     """
 
-# Change inittab
+    # Install the good tools
+      sudo yum install -y epel-release
+      sudo yum install -y git gawk perf tmux openssh-server nmap curl tcpdump wireshark hexedit  make automake gcc gcc-c++ kernel-devel lynx unzip python34 python34-devel tree R 
 
-> vi /etc/inittab
-# Change the following line
-# id:3:initdefault:
-# to
-# id:5:initdefault:
+    ## VirtualBox Install ##
+      # Enable vbox repo
+        cd /etc/yum.repos.d
+        sudo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
+      # Install dynamic kernel module support
+        sudo yum --enablerepo=epel install -y dkms
+      # Get more cools tools
+        sudo yum groupinstall -y "Development Tools"
+        sudo yum install -y kernel-devel
+      # Search for latest version
+        yum search VirtualBox
+      # Install latest where v.x is the highest number output from the search
+        sudo yum install VirtualBox-v.x
+      
+    # Create dirs
+      mkdir ~/scratch
+      mkdir ~/develp
+      mkdir ~/install
 
-# Reboot
-> init 6
-# done.
+#### Automatic Security updates ####
+    # install yum-cron
+     sudo yum install -y yum-cron
+    # Edit config file, change:
+        """
+        update_cmd = security
+        apply_updates = yes 
+        """"
+      # update_cmd default=>security
+      # apply_updates no=>yes
 
-## Configure networking
-> vi /etc/sysconfig/network-scripts/ifcfg-eth0
-# Change the following
-# ONBOOT="no"
-# to
-# ONBOOT="yes"
+    # Check status
+      sudo systemctl status yum-cron
+    # Start yum-cron service on boot
+      sudo systemctl enable yum-cron
+    # Start yum-cron service now
+      sudo systemctl start yum-cron
+    # Check status
+      sudo systemctl status yum-cron
+
+#### ssh init ####
+
+    # Create a new ssh dir
+     mkdir -p ~/.ssh
+
+    # Jump into new ssh dir
+     cd ~/.ssh
+
+    # Generate new ssh key pair using RSA 
+     ssh-keygen -t rsa
+ 
+    # Copy your new key over to other computers
+     cat ~/.ssh/id_rsa.pub | ssh me@my_ip_goes_here 'cat >> ~/.ssh/authorized_keys'
+ 
+    # Create your own authorized_keys file and set permissions
+     touch ~/.ssh/authorized_keys
+ 
+    # Set proper permissions on ssh
+     chmod 0700 ~/.ssh
+     chmod 0642 ~/.ssh/authorized_keys
+
+    ## Change to high port ##
+      # EQS NOTE: Change the highport to something in the range of 49152-65535
+      #           For the sake of this guide I'm just using 2244
+      # Edit sshd config
+      sudo vi /etc/ssh/sshd_config
+      # 
+      """
+      Port 24816
+      """
+      # Install package to manage SeLinux
+       sudo yum -y install policycoreutils-python
+      # Use semanage to change port permission
+       sudo semanage port -a -t ssh_port_t -p tcp 24816
+      # Add firewall rule for new port
+       sudo firewall-cmd --permanent --zone=public --add-port=24816/tcp
+      # Restart Firewall
+       sudo firewall-cmd --reload
+      # Restart sshd
+       sudo systemctl restart sshd.service
+
+
+
+
+## VM Centos ##
+
+    ## Install guest additions
+    # Get epel
+    sudo yum install -y epel-release
+    # Enable epel and install dkms
+    sudo yum --enablerepo=epel install -y dkms
+    # Install development tools
+    > yum groupinstall "Development Tools"
+    > yum install kernel-devel
+    # from VM Devices menu select Install Guest Additions CD
+    > cd /media/VBOXADDITIONS_4.3.26_98988
+    > sudo sh VBoxLinuxAdditions.run
+    # done.
+
+#### Install GUI (centos_minimal_install.iso) ####
+    ## Install Desktop and other such utils
+    > yum -y groupinstall "Desktop" "Desktop Platform" \
+      "X Window System" "Fonts" "Graphical Administration Tools"
+      "Internet Browser" "General Purpose Desktop" \ 
+      "Compatibility libraries" "KDE desktop"
+
+    # Optional
+    > yum -y groupinstall "Office Suite and Productivity"
+
+    > yum -y groupinstall "Graphics Creation Tools"
+
+## If you want to start the GUI on boot:
+    > vi /etc/inittab
+    # Change the following line
+    # id:3:initdefault:
+    # to
+    # id:5:initdefault:
+
+    # Reboot
+    > init 6
+    # done.
+
