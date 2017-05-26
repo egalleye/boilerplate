@@ -1,0 +1,4 @@
+/dev/drivename0  /data00  ext4 defaults,noatime 0 0
+/dev/drivename1  /data01  ext4 defaults,noatime 0 0
+/dev/drivename2  /data02  ext4 defaults,noatime 0 0
+/dev/drivename3  /data03  ext4 defaults,noatime 0 0
