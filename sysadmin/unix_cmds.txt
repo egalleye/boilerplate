@@ -39,7 +39,7 @@
         # Start new session called new_session
           tmux new -s new_session
         # Create vertical terminal seperator
-	  [ctrl-b] %
+	      [ctrl-b] %
 	## Movement ##
 	  # Move next pane
 	    [ctrl-b] n

@@ -19,7 +19,11 @@
 
     # Install the good tools
       sudo yum install -y epel-release
-      sudo yum install -y git gawk perf tmux openssh-server nmap curl tcpdump wireshark hexedit  make automake gcc gcc-c++ kernel-devel lynx unzip python34 python34-devel tree R 
+      sudo yum install -y git gawk perf tmux openssh-server \
+               nmap curl tcpdump wireshark hexedit  \
+               make automake gcc gcc-c++ kernel-devel lynx \
+               unzip python34 python34-devel python34-pip \
+               tree R 
 
     ## VirtualBox Install ##
       # Enable vbox repo
@@ -39,6 +43,9 @@
       mkdir ~/scratch
       mkdir ~/develp
       mkdir ~/install
+
+    # Change hostname
+     hostnamectl set-hostname cool-hostname
 
 #### Automatic Security updates ####
     # install yum-cron
@@ -80,6 +87,8 @@
     # Set proper permissions on ssh
      chmod 0700 ~/.ssh
      chmod 0642 ~/.ssh/authorized_keys
+     chmod 600 ~/.ssh/config
+
 
     ## Change to high port ##
       # EQS NOTE: Change the highport to something in the range of 49152-65535
@@ -101,6 +110,43 @@
       # Restart sshd
        sudo systemctl restart sshd.service
 
+## Nginx init ##
+  # install nginx
+   sudo yum install -y nginx
+  # start nginx
+   sudo systemctl start nginx
+  # enable nginx to start on boot
+   sudo systemctl enable nginx
+  # Configure firewall
+   sudo firewall-cmd --permanent --zone=public --add-service=http
+   sudo firewall-cmd --permanent --zone=public --add-service=https
+   sudo firewall-cmd --reload
+
+
+## Postgres init ##
+  # install postgres
+   sudo yum install -y postgresql-server postgresql-contrib
+  # Setup db
+   sudo postgresql-setup initdb
+  # Change following two lines in pg_hba.conf to "trust" 
+  # to allow passwordless connect
+    sudo vi /var/lib/pgsql/data/pg_hba.conf
+    """
+    host    all             all             127.0.0.1/32            trust
+    host    all             all             ::1/128                 trust
+    """
+  # start postgres
+   sudo systemctl start postgresql
+  # enable postgres to start on boot
+   sudo systemctl enable postgresql
+  # Add db user (name should be same as db)
+   sudo useradd dbname
+  # access psql shell
+   sudo -i -u dbname psql
+
+## Javascript init ##
+  # install javascript
+   sudo yum install -y nodejs npm  
 
 
 

@@ -260,7 +260,7 @@ if __name__ == "__main__":
     #test_pg_insert()
     
     # Uncomment to test pg_dump_csv()
-    test_pg_dump_csv()
+    #test_pg_dump_csv()
 
 
 
