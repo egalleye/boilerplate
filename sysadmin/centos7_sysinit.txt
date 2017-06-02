@@ -115,6 +115,8 @@
    sudo yum install -y nginx
   # start nginx
    sudo systemctl start nginx
+  # start firewalld
+   sudo systemctl start firewalld
   # enable nginx to start on boot
    sudo systemctl enable nginx
   # Configure firewall
