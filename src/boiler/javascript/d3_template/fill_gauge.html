@@ -10,31 +10,34 @@
     </style>
 </head>
 <body>
-<svg id="fillgauge" width="97%" height="250" onclick="gauge.update(NewValue());"></svg>
+<svg id="cpu_gauge" width="97%" height="250"></svg>
+<svg id="disk_gauge" width="97%" height="250"></svg>
 <script language="JavaScript">
-    var config = liquidFillGaugeDefaultSettings();
-    config.circleThickness = 0.1;
-    config.circleColor = "#6DA398";
-    config.textColor = "#0E5144";
-    config.waveTextColor = "#6DA398";
-    config.waveColor = "#246D5F";
-    config.textVertPosition = 0.52;
-    config.waveAnimateTime = 5000;
-    config.waveHeight = 0;
-    config.waveAnimate = false;
-    config.textSize = 1.2;
-    config.minValue = 0;
-    config.maxValue = 100
-    config.displayPercent = false;
-    var gauge = loadLiquidFillGauge("fillgauge", 55, config);
-
-    function NewValue(){
-        if(Math.random() > .5){
-            return Math.round(Math.random()*100);
-        } else {
-            return (Math.random()*100).toFixed(1);
-        }
-    }
+    d3.text("sys_stats.csv", function(error, datasetText) {
+        var parsedCSV = d3.csv.parseRows(datasetText);
+        var table_header = parsedCSV[0];
+        var table_row = parsedCSV[1];
+        var cpu_usage = table_row[0];
+        var disk_usage = table_row[1];
+        console.log("cpu usage = " + cpu_usage);
+        console.log("disk usage = " + disk_usage);
+        var config = liquidFillGaugeDefaultSettings();
+        config.circleThickness = 0.1;
+        config.circleColor = "#6DA398";
+        config.textColor = "#0E5144";
+        config.waveTextColor = "#6DA398";
+        config.waveColor = "#246D5F";
+        config.textVertPosition = 0.52;
+        config.waveAnimateTime = 5000;
+        config.waveHeight = 0;
+        config.waveAnimate = false;
+        config.textSize = 1.2;
+        config.minValue = 0;
+        config.maxValue = 100
+        config.displayPercent = false;
+        var cpugauge = loadLiquidFillGauge("cpu_gauge", cpu_usage, config);
+        var diskgauge = loadLiquidFillGauge("disk_gauge", disk_usage, config);
+    });
 </script>
 </body>
 </html>
