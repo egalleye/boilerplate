@@ -82,12 +82,12 @@
     ## Install postgres ##
         sudo apt-get install -y postgresql postgresql-contrib
       # Create new user account (with same name as database)
-        adduser pg_db
+        sudo adduser pg_db
       # Change to postgres user
         sudo -i -u postgres
        
       # Create a postgres superuser useraccount (same name as your database)
-        createuser --interactive # yes to superuser
+        createuser --interactive # yes to superuser username pg_db
   
       # Create database
         createdb {pg_db}
@@ -112,7 +112,7 @@
                 host    all         all         127.0.0.1/32         trust
                 """
             # Update postgres with new config
-              sudo systemctl postgresql restart
+              sudo systemctl restart postgresql 
 
 
     ## Install Node.js ##
