@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="liquidFillGauge.js" language="JavaScript"></script>
+    <style>
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+    </style>
+    <meta http-equiv="refresh" content="5" >
+</head>
+<body>
+<svg id="cpu_gauge" width="97%" height="250"></svg>
+
+<svg id="disk_gauge" width="97%" height="250"></svg>
+
+<svg id="mem_gauge" width="97%" height="250"></svg>
+<script language="JavaScript">
+
+    d3.text("sys_stats.csv", function(error, datasetText) {
+        var parsedCSV = d3.csv.parseRows(datasetText);
+        var table_header = parsedCSV[0];
+        var table_row = parsedCSV[1];
+        var cpu_usage = table_row[0];
+        var disk_usage = table_row[1];
+        var mem_usage = table_row[2];
+        console.log("cpu usage = " + cpu_usage);
+        console.log("disk usage = " + disk_usage);
+        console.log("mem usage = " + mem_usage);
+        var config = liquidFillGaugeDefaultSettings();
+        config.circleThickness = 0.1;
+        config.circleColor = "#6DA398";
+        config.textColor = "#0E5144";
+        config.waveTextColor = "#6DA398";
+        config.waveColor = "#246D5F";
+        config.textVertPosition = 0.52;
+        config.waveAnimateTime = 5000;
+        config.waveHeight = 0;
+        config.waveAnimate = false;
+        config.textSize = 1.2;
+        config.minValue = 0;
+        config.maxValue = 100
+        config.displayPercent = false;
+        var cpugauge = loadLiquidFillGauge("cpu_gauge", cpu_usage, config);
+        var diskgauge = loadLiquidFillGauge("disk_gauge", disk_usage, config);
+        var memgauge = loadLiquidFillGauge("mem_gauge", mem_usage, config);
+        console.log("I'm awake, I'm awake..");
+    });
+
+</script>
+</body>
+</html>
