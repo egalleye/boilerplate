@@ -1,0 +1,4 @@
+    sysread_timestamp timestamp PRIMARY KEY NOT NULL,
+    cpu_usage real,
+    disc_usage real,
+    mem_usage real
