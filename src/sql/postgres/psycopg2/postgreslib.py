@@ -6,12 +6,12 @@ import random
 # global declare
 conn = None
 cursor = None
-db_name = "burnin"
+db_name = "pg_db"
 db_user = "postgres"
 db_host = "localhost"
 db_password = "xxxxxxxxxxxx"
-db_table = "burnin_table_a"
-csv_file = "burnin.csv"
+db_table = "clustreye"
+csv_file = "clustreye.csv"
 db_schema_file = "database_schema.txt"
 
 
@@ -91,6 +91,7 @@ def pg_insert(db_table, table_header, insert_vals):
         # Comment next two lines for testing
         cursor.execute(pg_select_str)
         conn.commit()
+        print(pg_select_str);
     except Exception as e:
         color_print("pg_insert() failed")
         print("Error msg:\n{0}".format(e))
@@ -205,6 +206,7 @@ def create_row(table_types):
     fake_ip = "192.168.0.111"
     fake_date = "now()"
     fake_int = 24
+    fake_real = 72.24
 
     for dbtype in table_types:
         if (dbtype == "text"):
@@ -219,6 +221,8 @@ def create_row(table_types):
             values_row +=  "'" + rand_mac() + "'" + ", " 
         elif (dbtype == "inet"):
             values_row +=  "'" + fake_ip + "'" + ", " 
+        elif (dbtype == "real"):
+            values_row +=  str(fake_real)  + ", " 
         else:
             color_print("ERROR: Unknown row type!" + dbtype)
     # Hack to remove trailing ', ' that is added by for loop
@@ -257,7 +261,7 @@ if __name__ == "__main__":
     test_pg_connect()
 
     # Uncomment to test pg_insert()
-    #test_pg_insert()
+    test_pg_insert()
     
     # Uncomment to test pg_dump_csv()
     #test_pg_dump_csv()
