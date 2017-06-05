@@ -22,6 +22,9 @@ do
     #echo "$cpu_usage, $disc_usage" >> /usr/share/nginx/html/sys_stats.csv
     echo "$cpu_usage, $disc_usage, $mem_usage" >> /var/www/html/sys_stats.csv
     #echo "$cpu_usage, $disc_usage"
-    python3 sysstat_insert.py
+
+
+    ## Uncomment this to turn on python logging to db
+    #python3 sysstat_insert.py
     sleep 1
 done
