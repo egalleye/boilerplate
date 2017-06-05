@@ -13,8 +13,9 @@
     egall ALL=(ALL) NOPASSWD: ALL
     """
 # Grab the handy tools they didn't install
-  sudo apt-get install -y git linux-tools-common linux-tools-generic tmux openssh-server nmap curl tcpdump tshark hexedit gcc linux-tools-4.8.0-34-generic build-essential lynx unzip python3 python3-dev tree virtualbox r-base-core bc
+  sudo apt-get install -y git tmux openssh-server nmap curl tcpdump tshark hexedit gcc build-essential lynx unzip python3 python3-dev tree virtualbox r-base-core bc
 
+  sudo apt-get install -y linux-tools-common linux-tools-generic linux-tools-4.8.0-34-generic
 # Create scratch dir
   mkdir ~/scratch
   mkdir ~/develp
