@@ -30,8 +30,11 @@ do
         	sleep 1
         fi
     done
-    sudo umount -f $mnt_dir
     drive_name=$(echo "$drive" | sed -e 's/\/dev\///g')
+    # EQS NOTE: Take this out for real test
+    if [ "$drive_name" == "sdn" ]; then
+        exit 0;
+    fi
     echo "$drive_name"
     sudo parted -s -a optimal $drive mklabel gpt -- mkpart primary ext4 1 -1
     sudo mkfs.ext4 $drive$one
