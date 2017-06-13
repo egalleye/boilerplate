@@ -6,10 +6,10 @@ mnt_dir="/mnt/data/"
 bigddfile="bigddfile.out"
 outputdir="/home/test/supermicro_benchmarks/drive/"
 ext=".txt"
+dev_dir="/dev/"
 
 # EQS NOTE: For nvme's we'll need this line instead of the basic /dev/sd*
-#ls_out=$(ls /dev/sd*; ls /dev/nvme*)
-ls_out=$(ls /dev/sd*)
+lsblk_out=$(lsblk -d | awk '{if(NR>1)print $1}')
 
 #### Disc test ####
 
@@ -17,9 +17,9 @@ ls_out=$(ls /dev/sd*)
 sudo mkdir -p /mnt/data
 sudo chown -R test:test /mnt/data
 
-for drive in ${ls_out[@]}
+for drive_name in ${lsblk_out[@]}
 do
-    
+    drive="$dev_dir$drive_name"
     while [ 1 ] 
     do
         if ! df -h | grep -q '$mnt_dir'; then
@@ -30,7 +30,6 @@ do
         	sleep 1
         fi
     done
-    drive_name=$(echo "$drive" | sed -e 's/\/dev\///g')
     # EQS NOTE: Take this out for real test
     if [ "$drive_name" == "sdn" ]; then
         exit 0;
