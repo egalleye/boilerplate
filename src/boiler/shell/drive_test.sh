@@ -2,7 +2,7 @@
 
 
 one="1"
-mnt_dir="/mnt/data/"
+mnt_dir_base="/mnt/data/"
 bigddfile="bigddfile.out"
 outputdir="/home/test/supermicro_benchmarks/drive/"
 ext=".txt"
@@ -39,7 +39,7 @@ do
         continue;
     fi
 
-    sudo mkdir $mnt_dir$drive_name
+    sudo mkdir $mnt_dir_base$drive_name
 done 
 
 wait
@@ -47,25 +47,26 @@ wait
 # Mount drives
 for drive_name in ${lsblk_out[@]}
 do
+    drive="$dev_dir$drive_name"
     if [ "$drive_name" == "sdn" ]; then
         continue;
     fi
-    sudo mount $drive$one $mnt_dir$drive_name
+    mnt_dir=$mnt_dir_base$drive_name
+    sudo mount $drive$one $mnt_dir
     sudo chown -R test:test $mnt_dir
 done 
 
-
+## FIO Test ##
 for drive_name in ${lsblk_out[@]}
 do
     if [ "$drive_name" == "sdn" ]; then
         continue;
     fi
-    ## FIO Test ##
     echo "################ FIO ################"
 
     drive="$dev_dir$drive_name"
     mnt_dir=$mnt_dir_base$drive_name
-    echo "Drive name $drive_name"
+    echo "Drive $mnt_dir/benchtest"
 
     fio_out=$(fio --name=random-writers --ioengine=libaio --iodepth=16 --rw=randwrite --bs=32k --direct=0 --size=64m --time_based --runtime=24 --filename=$mnt_dir/benchtest > /tmp/$drive_name &)
 
@@ -112,6 +113,8 @@ do
     if [ "$drive_name" == "sdn" ]; then
         continue;
     fi
-    sudo umount -f $mnt_dir$drive_name
+    mnt_dir=$mnt_dir_base$drive_name
+    echo "umounting $mnt_dir"
+    sudo umount -f $mnt_dir
 done 
 
