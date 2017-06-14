@@ -7,6 +7,8 @@ bigddfile="bigddfile.out"
 outputdir="/home/test/supermicro_benchmarks/drive/"
 ext=".txt"
 dev_dir="/dev/"
+fio_runtime=240
+fiopids=""
 
 # EQS NOTE: For nvme's we'll need this line instead of the basic /dev/sd*
 lsblk_out=$(lsblk -d | awk '{if(NR>1)print $1}')
@@ -68,7 +70,7 @@ do
     mnt_dir=$mnt_dir_base$drive_name
     echo "Drive $mnt_dir/benchtest"
 
-    fio_out=$(fio --name=random-writers --ioengine=libaio --iodepth=16 --rw=randwrite --bs=32k --direct=0 --size=64m --time_based --runtime=24 --filename=$mnt_dir/benchtest > /tmp/$drive_name &)
+    fio_out=$(fio --name=random-writers --ioengine=libaio --iodepth=16 --rw=randwrite --bs=32k --direct=0 --size=64m --time_based --runtime=$fio_runtime --filename=$mnt_dir/benchtest > /tmp/$drive_name &)
 
     #echo "################ Cleanup ################"
     ## Clean up ##
@@ -87,9 +89,22 @@ do
 
 done
 
+fio_pids=$(pgrep -x fio)
 
-wait
-sleep 25
+while [ 1 ]
+do
+    if pgrep -x "fio" > /dev/null
+    then
+        echo "FIO Running"
+        sleep 8
+    else
+        echo "FIO finished!"
+        break
+    fi
+done
+#wait
+#sleepytime=$fio_runtime+10
+#sleep $sleepytime
 
 for drive_name in ${lsblk_out[@]}
 do
