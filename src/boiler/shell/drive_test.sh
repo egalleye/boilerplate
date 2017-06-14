@@ -10,6 +10,34 @@ dev_dir="/dev/"
 fio_runtime=240
 fiopids=""
 
+drivetime=$(cat supermicro_benchmark.config | grep "drivetime" | sed -e 's/=/ /g' | awk '{print $2}')
+
+timeunits=$(echo "${drivetime: -1}")
+TIMEOUT=${drivetime::-1}
+
+if [ "$timeunits" == 'S' ] || [ "$timeunits" == 's' ]
+then
+    timeunitsstr="seconds"
+    timeseconds=$TIMEOUT
+    echo "sTimeout = $TIMEOUT"
+elif [ "$timeunits" == 'M' ] || [ "$timeunits" == 'm' ]
+then
+    timeunitsstr="minutes"
+    timeseconds=$(echo "$TIMEOUT * 60" | bc -l)
+    echo "mTimeout = $TIMEOUT"
+elif [ "$timeunits" == 'H' ] || [ "$timeunits" == 'h' ]
+then
+    timeunitsstr="hours"
+    timeseconds=$(echo "$TIMEOUT * 3600" | bc -l)
+    echo "hTimeout = $TIMEOUT"
+else
+    echo "No time"
+    timeseconds=$TIMEOUT
+fi
+
+echo "Running drive test for $timeseconds seconds"
+
+
 # EQS NOTE: For nvme's we'll need this line instead of the basic /dev/sd*
 lsblk_out=$(lsblk -d | awk '{if(NR>1)print $1}')
 
@@ -102,9 +130,6 @@ do
         break
     fi
 done
-#wait
-#sleepytime=$fio_runtime+10
-#sleep $sleepytime
 
 for drive_name in ${lsblk_out[@]}
 do
