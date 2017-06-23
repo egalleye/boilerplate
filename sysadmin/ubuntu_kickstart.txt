@@ -1,0 +1,32 @@
+# This guide inspired by Brandon Authier and his askubuntu post:
+# https://askubuntu.com/questions/806820/how-do-i-create-a-completely-unattended-install-of-ubuntu-desktop-16-04-1-lts
+
+# NOTES:
+# - The txt.cfg file referenced in this can be found in this directory (gitrepo)
+# - The ks.preseed file referenced in this can be found in this directory (gitrepo)
+# - iso being used is: ubuntu-16.04.1-desktop-amd64.iso, replace with your image name (and path!)
+
+#### Mount ISO and edit files ####
+
+  ## Create directory's
+  # For 
+  mkdir -p /mnt/iso
+  mkdir -p /opt/ubuntuiso
+
+  # Mount ISO
+  mount -o loop ~/Downloads/ubuntu-16.04.1-desktop-amd64.iso /mnt/iso
+
+  ## Copy over iso files so to a place where they can be edited (it's mounted as read only) ##
+
+  # Copy over files
+  cp -rT /mnt/iso /opt/ubuntuiso
+
+#### ks.preseed #### 
+# The user/root password need to be added by you. Here is the link that shows you 3 different ways to make a crypt 3 password: https://administratosphere.wordpress.com/2011/06/16/generating-passwords-using-crypt3/
+# You may want to change the groups your user is assigned to.
+# You will definitely want to change the success_command. I left it to show how it can be formatted and how to use the /target environment.
+
+
+# Create the new iso:
+mkisofs -D -r -V "UNATTENDED_UBUNTU" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /tmp/ubuntu16-desktop-unattended-install.iso /opt/ubuntuiso
+
