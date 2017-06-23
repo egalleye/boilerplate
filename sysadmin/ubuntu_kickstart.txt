@@ -22,9 +22,15 @@
   cp -rT /mnt/iso /opt/ubuntuiso
 
 #### ks.preseed #### 
+# cp ./ks.preseed /opt/ubuntuiso/
+
+## NOTES ON ks.preseed
 # The user/root password need to be added by you. Here is the link that shows you 3 different ways to make a crypt 3 password: https://administratosphere.wordpress.com/2011/06/16/generating-passwords-using-crypt3/
 # You may want to change the groups your user is assigned to.
 # You will definitely want to change the success_command. I left it to show how it can be formatted and how to use the /target environment.
+
+#### txt.cfg ####
+# cp ./txt.cfg /opt/ubuntuiso/isolinux/
 
 
 # Create the new iso:
