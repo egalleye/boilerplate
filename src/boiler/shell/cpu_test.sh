@@ -41,5 +41,5 @@ echo "Prestress = $prestress"
 echo "Poststress = $poststress"
 
 cpu_load=$(echo $poststress/$prestress | bc -l)
-echo "cpu_load_relative, cpu_use" > ~/supermicro_benchmarks/cpu/cpu_test.csv
+echo "cpu_load_5min, cpu_use_percent" > ~/supermicro_benchmarks/cpu/cpu_test.csv
 printf "%.02f, %.02f" $cpu_load $cpu_use >> ~/supermicro_benchmarks/cpu/cpu_test.csv
