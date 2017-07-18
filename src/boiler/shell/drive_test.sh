@@ -255,7 +255,7 @@ consolidate_stats() {
         drive_clat=$(cat $fio_outfile | grep "stdev" | grep "clat" | awk '{print $5}' | sed -e 's/[^0-9.]*//g')
         smrtctl_temp_c=$(cat $smrtctl_outfile)
         
-        echo "fio_bandwidth_kbps, fio_clat_used, hdparm, dd_64M, drive_temp_celsius" > $outputdir$drive_name$ext
+        echo "fio_bandwidth_kbps, fio_clat_avg_usec, hdparm_mbps, dd_64mb, drive_temp_celsius" > $outputdir$drive_name$ext
         echo "$drive_bandwidth, $drive_clat, $hdparm, $dd_out, $smrtctl_temp_c" >> $outputdir$drive_name$ext
         echo "fio bandwidth is $drive_bandwidth"
         echo "fio clat is $drive_clat"
