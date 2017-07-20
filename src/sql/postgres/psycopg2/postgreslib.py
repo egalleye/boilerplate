@@ -12,7 +12,7 @@ db_host = "localhost"
 db_password = "xxxxxxxxxxxx"
 db_table = "clustreye"
 csv_file = "clustreye.csv"
-db_schema_file = "database_schema.txt"
+db_schema_fileg = "database_schema.txt"
 
 
 def pg_create_table(table_name, schema_str, db_name, db_user, db_host, db_password):
@@ -88,6 +88,7 @@ def pg_insert(db_table, table_header, insert_vals):
     global cursor
     try:
         pg_select_str = "INSERT INTO " + db_table + " (" + table_header + ")  VALUES (" + insert_vals + ");"
+        print(pg_select_str)
         # Comment next two lines for testing
         cursor.execute(pg_select_str)
         conn.commit()
@@ -96,7 +97,7 @@ def pg_insert(db_table, table_header, insert_vals):
         color_print("pg_insert() failed")
         print("Error msg:\n{0}".format(e))
 
-def pg_dump_csv(dumpfile, ds_table, csv_header):
+def pg_dump_csv(dumpfile, db_table, csv_header):
     global cursor
     # remove old csv file 
     try:
@@ -175,8 +176,10 @@ Helper function to parse the database_schema
 Inputs: None
 Outputs: tups of (table names, table types) that should be 1:1
 """
-def parse_schema():
-    global db_schema_file
+def parse_schema(db_schema_file=None):
+    global db_schema_fileg
+    if (db_schema_file is None):
+        db_schema_file = db_schema_fileg
     table_names = []
     table_types = []
     with open(db_schema_file, 'r') as schema_fd:
