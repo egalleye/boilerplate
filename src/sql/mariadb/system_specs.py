@@ -76,6 +76,7 @@ def insert_cpu(cpu_info):
 def parse_mem_serials(sys_conf_path):
     memory_serial_num_list = []
     parse_mem_serials_cmd = "cat " + sys_conf_path + "| grep -A 10 'Locator'"
+    print("###########\n\n\n" + sys_conf_path + "\n\n\n\n")
     memory_info = bash_cmd(parse_mem_serials_cmd)
     memory_info = memory_info.split('--')
     for mem_info_blk in memory_info:
@@ -133,51 +134,65 @@ def get_cpu_info(macaddr_path):
     cpu_partnum = parse_cpu_partnum(sys_conf_path)
     return cpu_quantity, cpu_partnum
 
-def parse_motherboard_serial(sys_conf_path):
-    parse_motherboard_serial_cmd = "cat " + sys_conf_path + "| grep 'M/B SN' | awk '{print $3}'"
-    motherboard_serial = bash_cmd(parse_motherboard_serial_cmd)
-    return motherboard_serial.rstrip()
 
-def parse_motherboard_partnum(sys_conf_path):
-    parse_motherboard_partnum_cmd = "cat " + sys_conf_path + "| grep 'M/B PN' | awk '{print $3}'"
-    motherboard_partnum = bash_cmd(parse_motherboard_partnum_cmd)
-    return motherboard_partnum.rstrip()
-   
-
-def get_motherboard_info(macaddr_path):
-    sys_conf_path = macaddr_path + "/system.conf"
-    motherboard_serial = parse_motherboard_serial(sys_conf_path)
-    motherboard_partnum = parse_motherboard_partnum(sys_conf_path)
-    return motherboard_serial, motherboard_partnum
-
-
-def chassis_info(macaddr_path):
-    sys_conf_path = macaddr_path + "/system.conf"
-    parse_chassis_serial_cmd = "cat " + sys_conf_path + "| grep 'Chassis SN' | awk '{print $3}'"
-    chassis_serial = bash_cmd(parse_chassis_serial_cmd)
-    return chassis_serial
-
-def parse_sys_partnum(sys_conf_path):
-    parse_sys_partnum_cmd = "cat " + sys_conf_path + "| grep 'System P/N' | awk '{print $3}'"
-    sys_partnum = bash_cmd(parse_sys_partnum_cmd)
-    return sys_partnum.rstrip()
-
-def parse_sys_serial(sys_conf_path):
-    parse_sys_serial_cmd = "cat " + sys_conf_path + "| grep 'System S/N' | awk '{print $3}'"
-    sys_serial = bash_cmd(parse_sys_serial_cmd)
-    return sys_serial.rstrip()
-
-def system_info(macaddr_path):
-    sys_conf_path = macaddr_path + "/SN.txt"
+def system_info(sys_path):
     #### System info ####
-    sys_serial = parse_sys_serial(sys_conf_path)
-    sys_partnum = parse_sys_partnum(sys_conf_path)
+    sys_nic_path = macaddr_path + "/NIC.txt"
+    sysinfo_cmd_prefix = "cat " + sys_path
+    sysinfo_dict = {}
+    sysinfo_parse_cmd_list = [
+                       ("sys_serial", "/SN.txt | grep 'System S/N' | awk '{print $3}'"),
+                       ("sys_partnum", "/SN.txt | grep 'System P/N' | awk '{print $3}'"),
+                       ("sys_macaddr", "/NIC.txt | grep eth0 | sed 's/,/ /g' | awk '{print $2}'"),
+                       ("sys_eth0_ip", "/NIC.txt | grep eth0 | sed 's/,/ /g' | awk '{print $3}'"),
+                       ("sys_eth1_macaddr", "/NIC.txt | grep eth1 | sed 's/,/ /g' | awk '{print $2}'"),
+                       ("sys_ipmi_macaddr", "/NIC.txt | grep ipmi | sed 's/,/ /g' | awk '{print $2}'"),
+                       ("sys_ipmi_ip", "/NIC.txt | grep ipmi | sed 's/,/ /g' | awk '{print $3}'"),
+                       ("sys_vendor", "/system.conf | grep 'System' | awk '{print $3}'"),
+                       ("sys_pn", "/system.conf | grep 'Product PN' | awk '{print $3}'"),
+                       ("sys_sn", "/system.conf | grep 'Product SN' | awk '{print $3}'"),
+                       ("chassis_serial", "/system.conf | grep 'Chassis SN' | awk '{print $3}'"),
+                       ("bios_vendor", "/system.conf | grep 'BIOS Vendor' | awk '{print $3}'"),
+                       ("bios_version", "/system.conf | grep 'BIOS Version' | awk '{print $3}'"),
+                       ("bios_date", "/system.conf | grep 'BIOS Date' | awk '{print $3}'"),
+                       ("motherboard_serial", "/system.conf | grep 'M/B SN' | awk '{print $3}'"),
+                       ("motherboard_partnum", "/system.conf | grep 'M/B PN' | awk '{print $3}'")
+                      ]
 
-    #### Chassis info ####
-    chassis_serial = chassis_info(macaddr_path)
+    for sysinfo_parse_cmd in sysinfo_parse_cmd_list:
+        parsed_info = bash_cmd(sysinfo_cmd_prefix  + sysinfo_parse_cmd[1])
+        sysinfo_dict[sysinfo_parse_cmd[0]] = parsed_info.rstrip()
 
-    #### Motherboard info ####
-    motherboard_serial, motherboard_partnum = get_motherboard_info(macaddr_path)
+    sys_serial = sysinfo_dict["sys_serial"]
+    sys_partnum = sysinfo_dict["sys_partnum"]
+    sys_macaddr = sysinfo_dict["sys_macaddr"]
+    sys_eth0_ip = sysinfo_dict["sys_eth0_ip"]
+    sys_eth1_macaddr = sysinfo_dict["sys_eth1_macaddr"]
+    sys_ipmi_macaddr = sysinfo_dict["sys_ipmi_macaddr"]
+    sys_ipmi_ip = sysinfo_dict["sys_ipmi_ip"]
+    sys_vendor = sysinfo_dict["sys_vendor"]
+    chassis_serial = sysinfo_dict["chassis_serial"]
+    bios_vendor = sysinfo_dict["bios_vendor"]
+    bios_version = sysinfo_dict["bios_version"]
+    bios_date = sysinfo_dict["bios_date"]
+    motherboard_serial = sysinfo_dict["motherboard_serial"]
+    motherboard_partnum = sysinfo_dict["motherboard_partnum"]
+
+    print(sys_serial)
+    print(sys_partnum)
+    print(sys_macaddr)
+    print(sys_eth0_ip)
+    print(sys_eth1_macaddr)
+    print(sys_ipmi_macaddr)
+    print(sys_ipmi_ip)
+    print(sys_vendor)
+    print(bios_vendor)
+    print(bios_version)
+    print(bios_date)
+    print(chassis_serial)
+    print(motherboard_serial)
+    print(motherboard_partnum)
+    exit(0)
 
     #### CPU ####
     cpu_quantity, cpu_partnum = get_cpu_info(macaddr_path)
