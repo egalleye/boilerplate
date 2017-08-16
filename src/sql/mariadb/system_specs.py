@@ -76,7 +76,6 @@ def insert_cpu(cpu_info):
 def parse_mem_serials(sys_conf_path):
     memory_serial_num_list = []
     parse_mem_serials_cmd = "cat " + sys_conf_path + "| grep -A 10 'Locator'"
-    print("###########\n\n\n" + sys_conf_path + "\n\n\n\n")
     memory_info = bash_cmd(parse_mem_serials_cmd)
     memory_info = memory_info.split('--')
     for mem_info_blk in memory_info:
@@ -103,37 +102,12 @@ def parse_mem_serials(sys_conf_path):
                 memory_serial_num_list.append(mem_specs_tuple)
                 #print (mem_specs_tuple)
                 break
-    """
-    memory_serial_nums = memory_serial_nums.split('\n')
-    
-    for serial_num in memory_serial_nums:
-        if not (serial_num.startswith("NO")):
-            if (serial_num):
-                memory_serial_num_list.append(serial_num)
-    """
     return memory_serial_num_list
     
 def get_memory_info(macaddr_path):
     sys_conf_path = macaddr_path + "/sysinfo/dmidecode.log"
     memory_serial_num_list = parse_mem_serials(sys_conf_path)
     return memory_serial_num_list
-
-def parse_cpu_quantity(sys_conf_path):
-    parse_cpu_quantity_cmd = "cat " + sys_conf_path + "| grep 'CPU Quantities' | awk '{print $3}'"
-    cpu_quantity = bash_cmd(parse_cpu_quantity_cmd)
-    return cpu_quantity.rstrip()
-
-def parse_cpu_partnum(sys_conf_path):
-    parse_cpu_partnum_cmd = "cat " + sys_conf_path + "| grep 'CPU Model' | awk '{print $3$4$5$6$7}'"
-    cpu_partnum = bash_cmd(parse_cpu_partnum_cmd)
-    return cpu_partnum.rstrip()
-
-def get_cpu_info(macaddr_path):
-    sys_conf_path = macaddr_path + "/system.conf"
-    cpu_quantity = parse_cpu_quantity(sys_conf_path)
-    cpu_partnum = parse_cpu_partnum(sys_conf_path)
-    return cpu_quantity, cpu_partnum
-
 
 def system_info(sys_path):
     #### System info ####
@@ -156,7 +130,9 @@ def system_info(sys_path):
                        ("bios_version", "/system.conf | grep 'BIOS Version' | awk '{print $3}'"),
                        ("bios_date", "/system.conf | grep 'BIOS Date' | awk '{print $3}'"),
                        ("motherboard_serial", "/system.conf | grep 'M/B SN' | awk '{print $3}'"),
-                       ("motherboard_partnum", "/system.conf | grep 'M/B PN' | awk '{print $3}'")
+                       ("motherboard_partnum", "/system.conf | grep 'M/B PN' | awk '{print $3}'"),
+                       ("cpu_partnum", "/system.conf | grep 'CPU Model' | awk '{print $3$4$5$6$7}'"),
+                       ("cpu_quantity", "/system.conf | grep 'CPU Quantities' | awk '{print $3}'"),
                       ]
 
     for sysinfo_parse_cmd in sysinfo_parse_cmd_list:
@@ -177,6 +153,8 @@ def system_info(sys_path):
     bios_date = sysinfo_dict["bios_date"]
     motherboard_serial = sysinfo_dict["motherboard_serial"]
     motherboard_partnum = sysinfo_dict["motherboard_partnum"]
+    cpu_partnum = sysinfo_dict["cpu_partnum"]
+    cpu_quantity = sysinfo_dict["cpu_quantity"]
 
     print(sys_serial)
     print(sys_partnum)
@@ -192,15 +170,11 @@ def system_info(sys_path):
     print(chassis_serial)
     print(motherboard_serial)
     print(motherboard_partnum)
-    exit(0)
+    print(cpu_partnum)
+    print(cpu_quantity)
 
-    #### CPU ####
-    cpu_quantity, cpu_partnum = get_cpu_info(macaddr_path)
- 
     #### Memory ####
     memory_serial_num_list = get_memory_info(macaddr_path)
-    
-    sys_json = json.dumps({"sys_info" : {"sys_serial" : sys_serial, "sys_partnum" : sys_partnum}, "chassis_info" : {"chassis_serial" : chassis_serial}, "motherboard_info" : {"motherboard_serial" : motherboard_serial, "motherboard_partnum" : motherboard_partnum}, "cpu_info" : {"cpu_quantity" : cpu_quantity, "cpu_partnum" : cpu_partnum}, "memory_info" : { "memory_list" : memory_serial_num_list}})
 
     mb_info = (motherboard_serial, motherboard_partnum)
     insert_motherboard(mb_info)
@@ -215,6 +189,7 @@ def system_info(sys_path):
         mem_info = (mem_card[1], mem_card[2], mem_card[0], motherboard_serial)
         insert_memory(mem_info)
     
+    #sys_json = json.dumps({"sys_info" : {"sys_serial" : sys_serial, "sys_partnum" : sys_partnum}, "chassis_info" : {"chassis_serial" : chassis_serial}, "motherboard_info" : {"motherboard_serial" : motherboard_serial, "motherboard_partnum" : motherboard_partnum}, "cpu_info" : {"cpu_quantity" : cpu_quantity, "cpu_partnum" : cpu_partnum}, "memory_info" : { "memory_list" : memory_serial_num_list}})
     #pprint.pprint(sys_json)
  
 if __name__ == "__main__":
