@@ -1,0 +1,29 @@
+# EQSNOTE: Need to update this file with proper installation guide
+
+#### Troubleshooting ####
+# Get status of infiniband card
+ibstat
+
+# Run a more detailed test on infiniband card
+hca_self_test.ofed
+
+# Restart driver
+/etc/init.d/openibd restart
+
+# Show infiniband host nodes in topology
+ibhosts
+
+# Show InfiniBand switch nodes in topology
+ibswitches
+
+# Report link info for all links in the fabric
+iblinkinfo
+
+# Ping the infiniband card with guid GUID
+ibping -S GUID
+
+# Traceroute for infiniband
+ib_tracert [SRC] [DST]
+
+# Restart subnet manager
+/etc/init.d/opensm(d) restart
