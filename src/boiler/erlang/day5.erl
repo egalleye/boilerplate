@@ -1,5 +1,7 @@
+% Day 5
 -module(day5).
 -export([day_five/0]).
+
 
 do_mathies(A, B, N, Exponent, Lastret) when N > 0, Exponent =:= 0 ->
     %io:fwrite("A = ~w~nB = ~w~nN = ~w~nExp = ~w~nLastret = ~w~n", [A, B, N, Exponent, Lastret]),
